@@ -14378,6 +14378,2740 @@ class ExtractedEventsCompanion extends UpdateCompanion<ExtractedEvent> {
   }
 }
 
+class $InboxActionPlansTable extends InboxActionPlans
+    with TableInfo<$InboxActionPlansTable, InboxActionPlan> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InboxActionPlansTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
+    'item_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES inbox_items (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    check: () => ComparableExpr(version).isBiggerOrEqualValue(1),
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    check: () => status.isIn(InboxPlanStatus.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> createdAt =
+      GeneratedColumn<int>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxActionPlansTable.$convertercreatedAt);
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> updatedAt =
+      GeneratedColumn<int>(
+        'updated_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxActionPlansTable.$converterupdatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    itemId,
+    version,
+    status,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'inbox_action_plans';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InboxActionPlan> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(
+        _itemIdMeta,
+        itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InboxActionPlan map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InboxActionPlan(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      createdAt: $InboxActionPlansTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+      updatedAt: $InboxActionPlansTable.$converterupdatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}updated_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $InboxActionPlansTable createAlias(String alias) {
+    return $InboxActionPlansTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertercreatedAt =
+      const MicrosecondDateTimeConverter();
+  static TypeConverter<DateTime, int> $converterupdatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class InboxActionPlan extends DataClass implements Insertable<InboxActionPlan> {
+  final String id;
+  final String itemId;
+  final int version;
+  final String status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const InboxActionPlan({
+    required this.id,
+    required this.itemId,
+    required this.version,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['item_id'] = Variable<String>(itemId);
+    map['version'] = Variable<int>(version);
+    map['status'] = Variable<String>(status);
+    {
+      map['created_at'] = Variable<int>(
+        $InboxActionPlansTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    {
+      map['updated_at'] = Variable<int>(
+        $InboxActionPlansTable.$converterupdatedAt.toSql(updatedAt),
+      );
+    }
+    return map;
+  }
+
+  InboxActionPlansCompanion toCompanion(bool nullToAbsent) {
+    return InboxActionPlansCompanion(
+      id: Value(id),
+      itemId: Value(itemId),
+      version: Value(version),
+      status: Value(status),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory InboxActionPlan.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InboxActionPlan(
+      id: serializer.fromJson<String>(json['id']),
+      itemId: serializer.fromJson<String>(json['itemId']),
+      version: serializer.fromJson<int>(json['version']),
+      status: serializer.fromJson<String>(json['status']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'itemId': serializer.toJson<String>(itemId),
+      'version': serializer.toJson<int>(version),
+      'status': serializer.toJson<String>(status),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  InboxActionPlan copyWith({
+    String? id,
+    String? itemId,
+    int? version,
+    String? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => InboxActionPlan(
+    id: id ?? this.id,
+    itemId: itemId ?? this.itemId,
+    version: version ?? this.version,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  InboxActionPlan copyWithCompanion(InboxActionPlansCompanion data) {
+    return InboxActionPlan(
+      id: data.id.present ? data.id.value : this.id,
+      itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      version: data.version.present ? data.version.value : this.version,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxActionPlan(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('version: $version, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, itemId, version, status, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InboxActionPlan &&
+          other.id == this.id &&
+          other.itemId == this.itemId &&
+          other.version == this.version &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class InboxActionPlansCompanion extends UpdateCompanion<InboxActionPlan> {
+  final Value<String> id;
+  final Value<String> itemId;
+  final Value<int> version;
+  final Value<String> status;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const InboxActionPlansCompanion({
+    this.id = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InboxActionPlansCompanion.insert({
+    required String id,
+    required String itemId,
+    required int version,
+    required String status,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       itemId = Value(itemId),
+       version = Value(version),
+       status = Value(status),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<InboxActionPlan> custom({
+    Expression<String>? id,
+    Expression<String>? itemId,
+    Expression<int>? version,
+    Expression<String>? status,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemId != null) 'item_id': itemId,
+      if (version != null) 'version': version,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InboxActionPlansCompanion copyWith({
+    Value<String>? id,
+    Value<String>? itemId,
+    Value<int>? version,
+    Value<String>? status,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return InboxActionPlansCompanion(
+      id: id ?? this.id,
+      itemId: itemId ?? this.itemId,
+      version: version ?? this.version,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(
+        $InboxActionPlansTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(
+        $InboxActionPlansTable.$converterupdatedAt.toSql(updatedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxActionPlansCompanion(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('version: $version, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PlannedActionsTable extends PlannedActions
+    with TableInfo<$PlannedActionsTable, PlannedAction> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PlannedActionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
+  @override
+  late final GeneratedColumn<String> planId = GeneratedColumn<String>(
+    'plan_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES inbox_action_plans (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _entityTypeMeta = const VerificationMeta(
+    'entityType',
+  );
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+    'entity_type',
+    aliasedName,
+    false,
+    check: () => entityType.isIn(InboxEntityType.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _operationMeta = const VerificationMeta(
+    'operation',
+  );
+  @override
+  late final GeneratedColumn<String> operation = GeneratedColumn<String>(
+    'operation',
+    aliasedName,
+    false,
+    check: () => operation.isIn(InboxOperation.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _connectorIdMeta = const VerificationMeta(
+    'connectorId',
+  );
+  @override
+  late final GeneratedColumn<String> connectorId = GeneratedColumn<String>(
+    'connector_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _targetExternalIdMeta = const VerificationMeta(
+    'targetExternalId',
+  );
+  @override
+  late final GeneratedColumn<String> targetExternalId = GeneratedColumn<String>(
+    'target_external_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _fieldsJsonMeta = const VerificationMeta(
+    'fieldsJson',
+  );
+  @override
+  late final GeneratedColumn<String> fieldsJson = GeneratedColumn<String>(
+    'fields_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _beforeJsonMeta = const VerificationMeta(
+    'beforeJson',
+  );
+  @override
+  late final GeneratedColumn<String> beforeJson = GeneratedColumn<String>(
+    'before_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _evidenceJsonMeta = const VerificationMeta(
+    'evidenceJson',
+  );
+  @override
+  late final GeneratedColumn<String> evidenceJson = GeneratedColumn<String>(
+    'evidence_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _certaintyMeta = const VerificationMeta(
+    'certainty',
+  );
+  @override
+  late final GeneratedColumn<String> certainty = GeneratedColumn<String>(
+    'certainty',
+    aliasedName,
+    false,
+    check: () => certainty.isIn(InboxCertainty.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _riskMeta = const VerificationMeta('risk');
+  @override
+  late final GeneratedColumn<String> risk = GeneratedColumn<String>(
+    'risk',
+    aliasedName,
+    false,
+    check: () => risk.isIn(InboxRiskLevel.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _approvalStateMeta = const VerificationMeta(
+    'approvalState',
+  );
+  @override
+  late final GeneratedColumn<String> approvalState = GeneratedColumn<String>(
+    'approval_state',
+    aliasedName,
+    false,
+    check: () => approvalState.isIn(InboxApprovalState.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('pending'),
+  );
+  static const VerificationMeta _idempotencyKeyMeta = const VerificationMeta(
+    'idempotencyKey',
+  );
+  @override
+  late final GeneratedColumn<String> idempotencyKey = GeneratedColumn<String>(
+    'idempotency_key',
+    aliasedName,
+    false,
+    check: () => idempotencyKey.isNotValue(''),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> createdAt =
+      GeneratedColumn<int>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($PlannedActionsTable.$convertercreatedAt);
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> updatedAt =
+      GeneratedColumn<int>(
+        'updated_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($PlannedActionsTable.$converterupdatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    planId,
+    entityType,
+    operation,
+    connectorId,
+    targetExternalId,
+    fieldsJson,
+    beforeJson,
+    evidenceJson,
+    certainty,
+    risk,
+    approvalState,
+    idempotencyKey,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'planned_actions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PlannedAction> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('plan_id')) {
+      context.handle(
+        _planIdMeta,
+        planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_planIdMeta);
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+        _entityTypeMeta,
+        entityType.isAcceptableOrUnknown(data['entity_type']!, _entityTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('operation')) {
+      context.handle(
+        _operationMeta,
+        operation.isAcceptableOrUnknown(data['operation']!, _operationMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_operationMeta);
+    }
+    if (data.containsKey('connector_id')) {
+      context.handle(
+        _connectorIdMeta,
+        connectorId.isAcceptableOrUnknown(
+          data['connector_id']!,
+          _connectorIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_connectorIdMeta);
+    }
+    if (data.containsKey('target_external_id')) {
+      context.handle(
+        _targetExternalIdMeta,
+        targetExternalId.isAcceptableOrUnknown(
+          data['target_external_id']!,
+          _targetExternalIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('fields_json')) {
+      context.handle(
+        _fieldsJsonMeta,
+        fieldsJson.isAcceptableOrUnknown(data['fields_json']!, _fieldsJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fieldsJsonMeta);
+    }
+    if (data.containsKey('before_json')) {
+      context.handle(
+        _beforeJsonMeta,
+        beforeJson.isAcceptableOrUnknown(data['before_json']!, _beforeJsonMeta),
+      );
+    }
+    if (data.containsKey('evidence_json')) {
+      context.handle(
+        _evidenceJsonMeta,
+        evidenceJson.isAcceptableOrUnknown(
+          data['evidence_json']!,
+          _evidenceJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_evidenceJsonMeta);
+    }
+    if (data.containsKey('certainty')) {
+      context.handle(
+        _certaintyMeta,
+        certainty.isAcceptableOrUnknown(data['certainty']!, _certaintyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_certaintyMeta);
+    }
+    if (data.containsKey('risk')) {
+      context.handle(
+        _riskMeta,
+        risk.isAcceptableOrUnknown(data['risk']!, _riskMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_riskMeta);
+    }
+    if (data.containsKey('approval_state')) {
+      context.handle(
+        _approvalStateMeta,
+        approvalState.isAcceptableOrUnknown(
+          data['approval_state']!,
+          _approvalStateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('idempotency_key')) {
+      context.handle(
+        _idempotencyKeyMeta,
+        idempotencyKey.isAcceptableOrUnknown(
+          data['idempotency_key']!,
+          _idempotencyKeyMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_idempotencyKeyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PlannedAction map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PlannedAction(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      planId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}plan_id'],
+      )!,
+      entityType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_type'],
+      )!,
+      operation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}operation'],
+      )!,
+      connectorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}connector_id'],
+      )!,
+      targetExternalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_external_id'],
+      ),
+      fieldsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}fields_json'],
+      )!,
+      beforeJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}before_json'],
+      ),
+      evidenceJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}evidence_json'],
+      )!,
+      certainty: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}certainty'],
+      )!,
+      risk: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}risk'],
+      )!,
+      approvalState: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}approval_state'],
+      )!,
+      idempotencyKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}idempotency_key'],
+      )!,
+      createdAt: $PlannedActionsTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+      updatedAt: $PlannedActionsTable.$converterupdatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}updated_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $PlannedActionsTable createAlias(String alias) {
+    return $PlannedActionsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertercreatedAt =
+      const MicrosecondDateTimeConverter();
+  static TypeConverter<DateTime, int> $converterupdatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class PlannedAction extends DataClass implements Insertable<PlannedAction> {
+  final String id;
+  final String planId;
+  final String entityType;
+  final String operation;
+  final String connectorId;
+  final String? targetExternalId;
+  final String fieldsJson;
+  final String? beforeJson;
+  final String evidenceJson;
+  final String certainty;
+  final String risk;
+  final String approvalState;
+  final String idempotencyKey;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const PlannedAction({
+    required this.id,
+    required this.planId,
+    required this.entityType,
+    required this.operation,
+    required this.connectorId,
+    this.targetExternalId,
+    required this.fieldsJson,
+    this.beforeJson,
+    required this.evidenceJson,
+    required this.certainty,
+    required this.risk,
+    required this.approvalState,
+    required this.idempotencyKey,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['plan_id'] = Variable<String>(planId);
+    map['entity_type'] = Variable<String>(entityType);
+    map['operation'] = Variable<String>(operation);
+    map['connector_id'] = Variable<String>(connectorId);
+    if (!nullToAbsent || targetExternalId != null) {
+      map['target_external_id'] = Variable<String>(targetExternalId);
+    }
+    map['fields_json'] = Variable<String>(fieldsJson);
+    if (!nullToAbsent || beforeJson != null) {
+      map['before_json'] = Variable<String>(beforeJson);
+    }
+    map['evidence_json'] = Variable<String>(evidenceJson);
+    map['certainty'] = Variable<String>(certainty);
+    map['risk'] = Variable<String>(risk);
+    map['approval_state'] = Variable<String>(approvalState);
+    map['idempotency_key'] = Variable<String>(idempotencyKey);
+    {
+      map['created_at'] = Variable<int>(
+        $PlannedActionsTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    {
+      map['updated_at'] = Variable<int>(
+        $PlannedActionsTable.$converterupdatedAt.toSql(updatedAt),
+      );
+    }
+    return map;
+  }
+
+  PlannedActionsCompanion toCompanion(bool nullToAbsent) {
+    return PlannedActionsCompanion(
+      id: Value(id),
+      planId: Value(planId),
+      entityType: Value(entityType),
+      operation: Value(operation),
+      connectorId: Value(connectorId),
+      targetExternalId: targetExternalId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetExternalId),
+      fieldsJson: Value(fieldsJson),
+      beforeJson: beforeJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(beforeJson),
+      evidenceJson: Value(evidenceJson),
+      certainty: Value(certainty),
+      risk: Value(risk),
+      approvalState: Value(approvalState),
+      idempotencyKey: Value(idempotencyKey),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory PlannedAction.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PlannedAction(
+      id: serializer.fromJson<String>(json['id']),
+      planId: serializer.fromJson<String>(json['planId']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      operation: serializer.fromJson<String>(json['operation']),
+      connectorId: serializer.fromJson<String>(json['connectorId']),
+      targetExternalId: serializer.fromJson<String?>(json['targetExternalId']),
+      fieldsJson: serializer.fromJson<String>(json['fieldsJson']),
+      beforeJson: serializer.fromJson<String?>(json['beforeJson']),
+      evidenceJson: serializer.fromJson<String>(json['evidenceJson']),
+      certainty: serializer.fromJson<String>(json['certainty']),
+      risk: serializer.fromJson<String>(json['risk']),
+      approvalState: serializer.fromJson<String>(json['approvalState']),
+      idempotencyKey: serializer.fromJson<String>(json['idempotencyKey']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'planId': serializer.toJson<String>(planId),
+      'entityType': serializer.toJson<String>(entityType),
+      'operation': serializer.toJson<String>(operation),
+      'connectorId': serializer.toJson<String>(connectorId),
+      'targetExternalId': serializer.toJson<String?>(targetExternalId),
+      'fieldsJson': serializer.toJson<String>(fieldsJson),
+      'beforeJson': serializer.toJson<String?>(beforeJson),
+      'evidenceJson': serializer.toJson<String>(evidenceJson),
+      'certainty': serializer.toJson<String>(certainty),
+      'risk': serializer.toJson<String>(risk),
+      'approvalState': serializer.toJson<String>(approvalState),
+      'idempotencyKey': serializer.toJson<String>(idempotencyKey),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  PlannedAction copyWith({
+    String? id,
+    String? planId,
+    String? entityType,
+    String? operation,
+    String? connectorId,
+    Value<String?> targetExternalId = const Value.absent(),
+    String? fieldsJson,
+    Value<String?> beforeJson = const Value.absent(),
+    String? evidenceJson,
+    String? certainty,
+    String? risk,
+    String? approvalState,
+    String? idempotencyKey,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => PlannedAction(
+    id: id ?? this.id,
+    planId: planId ?? this.planId,
+    entityType: entityType ?? this.entityType,
+    operation: operation ?? this.operation,
+    connectorId: connectorId ?? this.connectorId,
+    targetExternalId: targetExternalId.present
+        ? targetExternalId.value
+        : this.targetExternalId,
+    fieldsJson: fieldsJson ?? this.fieldsJson,
+    beforeJson: beforeJson.present ? beforeJson.value : this.beforeJson,
+    evidenceJson: evidenceJson ?? this.evidenceJson,
+    certainty: certainty ?? this.certainty,
+    risk: risk ?? this.risk,
+    approvalState: approvalState ?? this.approvalState,
+    idempotencyKey: idempotencyKey ?? this.idempotencyKey,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  PlannedAction copyWithCompanion(PlannedActionsCompanion data) {
+    return PlannedAction(
+      id: data.id.present ? data.id.value : this.id,
+      planId: data.planId.present ? data.planId.value : this.planId,
+      entityType: data.entityType.present
+          ? data.entityType.value
+          : this.entityType,
+      operation: data.operation.present ? data.operation.value : this.operation,
+      connectorId: data.connectorId.present
+          ? data.connectorId.value
+          : this.connectorId,
+      targetExternalId: data.targetExternalId.present
+          ? data.targetExternalId.value
+          : this.targetExternalId,
+      fieldsJson: data.fieldsJson.present
+          ? data.fieldsJson.value
+          : this.fieldsJson,
+      beforeJson: data.beforeJson.present
+          ? data.beforeJson.value
+          : this.beforeJson,
+      evidenceJson: data.evidenceJson.present
+          ? data.evidenceJson.value
+          : this.evidenceJson,
+      certainty: data.certainty.present ? data.certainty.value : this.certainty,
+      risk: data.risk.present ? data.risk.value : this.risk,
+      approvalState: data.approvalState.present
+          ? data.approvalState.value
+          : this.approvalState,
+      idempotencyKey: data.idempotencyKey.present
+          ? data.idempotencyKey.value
+          : this.idempotencyKey,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlannedAction(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('entityType: $entityType, ')
+          ..write('operation: $operation, ')
+          ..write('connectorId: $connectorId, ')
+          ..write('targetExternalId: $targetExternalId, ')
+          ..write('fieldsJson: $fieldsJson, ')
+          ..write('beforeJson: $beforeJson, ')
+          ..write('evidenceJson: $evidenceJson, ')
+          ..write('certainty: $certainty, ')
+          ..write('risk: $risk, ')
+          ..write('approvalState: $approvalState, ')
+          ..write('idempotencyKey: $idempotencyKey, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    planId,
+    entityType,
+    operation,
+    connectorId,
+    targetExternalId,
+    fieldsJson,
+    beforeJson,
+    evidenceJson,
+    certainty,
+    risk,
+    approvalState,
+    idempotencyKey,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PlannedAction &&
+          other.id == this.id &&
+          other.planId == this.planId &&
+          other.entityType == this.entityType &&
+          other.operation == this.operation &&
+          other.connectorId == this.connectorId &&
+          other.targetExternalId == this.targetExternalId &&
+          other.fieldsJson == this.fieldsJson &&
+          other.beforeJson == this.beforeJson &&
+          other.evidenceJson == this.evidenceJson &&
+          other.certainty == this.certainty &&
+          other.risk == this.risk &&
+          other.approvalState == this.approvalState &&
+          other.idempotencyKey == this.idempotencyKey &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class PlannedActionsCompanion extends UpdateCompanion<PlannedAction> {
+  final Value<String> id;
+  final Value<String> planId;
+  final Value<String> entityType;
+  final Value<String> operation;
+  final Value<String> connectorId;
+  final Value<String?> targetExternalId;
+  final Value<String> fieldsJson;
+  final Value<String?> beforeJson;
+  final Value<String> evidenceJson;
+  final Value<String> certainty;
+  final Value<String> risk;
+  final Value<String> approvalState;
+  final Value<String> idempotencyKey;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const PlannedActionsCompanion({
+    this.id = const Value.absent(),
+    this.planId = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.operation = const Value.absent(),
+    this.connectorId = const Value.absent(),
+    this.targetExternalId = const Value.absent(),
+    this.fieldsJson = const Value.absent(),
+    this.beforeJson = const Value.absent(),
+    this.evidenceJson = const Value.absent(),
+    this.certainty = const Value.absent(),
+    this.risk = const Value.absent(),
+    this.approvalState = const Value.absent(),
+    this.idempotencyKey = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PlannedActionsCompanion.insert({
+    required String id,
+    required String planId,
+    required String entityType,
+    required String operation,
+    required String connectorId,
+    this.targetExternalId = const Value.absent(),
+    required String fieldsJson,
+    this.beforeJson = const Value.absent(),
+    required String evidenceJson,
+    required String certainty,
+    required String risk,
+    this.approvalState = const Value.absent(),
+    required String idempotencyKey,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       planId = Value(planId),
+       entityType = Value(entityType),
+       operation = Value(operation),
+       connectorId = Value(connectorId),
+       fieldsJson = Value(fieldsJson),
+       evidenceJson = Value(evidenceJson),
+       certainty = Value(certainty),
+       risk = Value(risk),
+       idempotencyKey = Value(idempotencyKey),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<PlannedAction> custom({
+    Expression<String>? id,
+    Expression<String>? planId,
+    Expression<String>? entityType,
+    Expression<String>? operation,
+    Expression<String>? connectorId,
+    Expression<String>? targetExternalId,
+    Expression<String>? fieldsJson,
+    Expression<String>? beforeJson,
+    Expression<String>? evidenceJson,
+    Expression<String>? certainty,
+    Expression<String>? risk,
+    Expression<String>? approvalState,
+    Expression<String>? idempotencyKey,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (planId != null) 'plan_id': planId,
+      if (entityType != null) 'entity_type': entityType,
+      if (operation != null) 'operation': operation,
+      if (connectorId != null) 'connector_id': connectorId,
+      if (targetExternalId != null) 'target_external_id': targetExternalId,
+      if (fieldsJson != null) 'fields_json': fieldsJson,
+      if (beforeJson != null) 'before_json': beforeJson,
+      if (evidenceJson != null) 'evidence_json': evidenceJson,
+      if (certainty != null) 'certainty': certainty,
+      if (risk != null) 'risk': risk,
+      if (approvalState != null) 'approval_state': approvalState,
+      if (idempotencyKey != null) 'idempotency_key': idempotencyKey,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PlannedActionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? planId,
+    Value<String>? entityType,
+    Value<String>? operation,
+    Value<String>? connectorId,
+    Value<String?>? targetExternalId,
+    Value<String>? fieldsJson,
+    Value<String?>? beforeJson,
+    Value<String>? evidenceJson,
+    Value<String>? certainty,
+    Value<String>? risk,
+    Value<String>? approvalState,
+    Value<String>? idempotencyKey,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return PlannedActionsCompanion(
+      id: id ?? this.id,
+      planId: planId ?? this.planId,
+      entityType: entityType ?? this.entityType,
+      operation: operation ?? this.operation,
+      connectorId: connectorId ?? this.connectorId,
+      targetExternalId: targetExternalId ?? this.targetExternalId,
+      fieldsJson: fieldsJson ?? this.fieldsJson,
+      beforeJson: beforeJson ?? this.beforeJson,
+      evidenceJson: evidenceJson ?? this.evidenceJson,
+      certainty: certainty ?? this.certainty,
+      risk: risk ?? this.risk,
+      approvalState: approvalState ?? this.approvalState,
+      idempotencyKey: idempotencyKey ?? this.idempotencyKey,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (planId.present) {
+      map['plan_id'] = Variable<String>(planId.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (operation.present) {
+      map['operation'] = Variable<String>(operation.value);
+    }
+    if (connectorId.present) {
+      map['connector_id'] = Variable<String>(connectorId.value);
+    }
+    if (targetExternalId.present) {
+      map['target_external_id'] = Variable<String>(targetExternalId.value);
+    }
+    if (fieldsJson.present) {
+      map['fields_json'] = Variable<String>(fieldsJson.value);
+    }
+    if (beforeJson.present) {
+      map['before_json'] = Variable<String>(beforeJson.value);
+    }
+    if (evidenceJson.present) {
+      map['evidence_json'] = Variable<String>(evidenceJson.value);
+    }
+    if (certainty.present) {
+      map['certainty'] = Variable<String>(certainty.value);
+    }
+    if (risk.present) {
+      map['risk'] = Variable<String>(risk.value);
+    }
+    if (approvalState.present) {
+      map['approval_state'] = Variable<String>(approvalState.value);
+    }
+    if (idempotencyKey.present) {
+      map['idempotency_key'] = Variable<String>(idempotencyKey.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(
+        $PlannedActionsTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(
+        $PlannedActionsTable.$converterupdatedAt.toSql(updatedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlannedActionsCompanion(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('entityType: $entityType, ')
+          ..write('operation: $operation, ')
+          ..write('connectorId: $connectorId, ')
+          ..write('targetExternalId: $targetExternalId, ')
+          ..write('fieldsJson: $fieldsJson, ')
+          ..write('beforeJson: $beforeJson, ')
+          ..write('evidenceJson: $evidenceJson, ')
+          ..write('certainty: $certainty, ')
+          ..write('risk: $risk, ')
+          ..write('approvalState: $approvalState, ')
+          ..write('idempotencyKey: $idempotencyKey, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ExecutionReceiptsTable extends ExecutionReceipts
+    with TableInfo<$ExecutionReceiptsTable, ExecutionReceipt> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ExecutionReceiptsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _actionIdMeta = const VerificationMeta(
+    'actionId',
+  );
+  @override
+  late final GeneratedColumn<String> actionId = GeneratedColumn<String>(
+    'action_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES planned_actions (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _connectorIdMeta = const VerificationMeta(
+    'connectorId',
+  );
+  @override
+  late final GeneratedColumn<String> connectorId = GeneratedColumn<String>(
+    'connector_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _externalIdMeta = const VerificationMeta(
+    'externalId',
+  );
+  @override
+  late final GeneratedColumn<String> externalId = GeneratedColumn<String>(
+    'external_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _outcomeMeta = const VerificationMeta(
+    'outcome',
+  );
+  @override
+  late final GeneratedColumn<String> outcome = GeneratedColumn<String>(
+    'outcome',
+    aliasedName,
+    false,
+    check: () => outcome.isIn(InboxExecutionOutcome.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _requestFingerprintMeta =
+      const VerificationMeta('requestFingerprint');
+  @override
+  late final GeneratedColumn<String> requestFingerprint =
+      GeneratedColumn<String>(
+        'request_fingerprint',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _responseSummaryMeta = const VerificationMeta(
+    'responseSummary',
+  );
+  @override
+  late final GeneratedColumn<String> responseSummary = GeneratedColumn<String>(
+    'response_summary',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> executedAt =
+      GeneratedColumn<int>(
+        'executed_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($ExecutionReceiptsTable.$converterexecutedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    actionId,
+    connectorId,
+    externalId,
+    outcome,
+    requestFingerprint,
+    responseSummary,
+    executedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'execution_receipts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ExecutionReceipt> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('action_id')) {
+      context.handle(
+        _actionIdMeta,
+        actionId.isAcceptableOrUnknown(data['action_id']!, _actionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_actionIdMeta);
+    }
+    if (data.containsKey('connector_id')) {
+      context.handle(
+        _connectorIdMeta,
+        connectorId.isAcceptableOrUnknown(
+          data['connector_id']!,
+          _connectorIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_connectorIdMeta);
+    }
+    if (data.containsKey('external_id')) {
+      context.handle(
+        _externalIdMeta,
+        externalId.isAcceptableOrUnknown(data['external_id']!, _externalIdMeta),
+      );
+    }
+    if (data.containsKey('outcome')) {
+      context.handle(
+        _outcomeMeta,
+        outcome.isAcceptableOrUnknown(data['outcome']!, _outcomeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_outcomeMeta);
+    }
+    if (data.containsKey('request_fingerprint')) {
+      context.handle(
+        _requestFingerprintMeta,
+        requestFingerprint.isAcceptableOrUnknown(
+          data['request_fingerprint']!,
+          _requestFingerprintMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_requestFingerprintMeta);
+    }
+    if (data.containsKey('response_summary')) {
+      context.handle(
+        _responseSummaryMeta,
+        responseSummary.isAcceptableOrUnknown(
+          data['response_summary']!,
+          _responseSummaryMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_responseSummaryMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ExecutionReceipt map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ExecutionReceipt(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      actionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}action_id'],
+      )!,
+      connectorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}connector_id'],
+      )!,
+      externalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}external_id'],
+      ),
+      outcome: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}outcome'],
+      )!,
+      requestFingerprint: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}request_fingerprint'],
+      )!,
+      responseSummary: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}response_summary'],
+      )!,
+      executedAt: $ExecutionReceiptsTable.$converterexecutedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}executed_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $ExecutionReceiptsTable createAlias(String alias) {
+    return $ExecutionReceiptsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $converterexecutedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class ExecutionReceipt extends DataClass
+    implements Insertable<ExecutionReceipt> {
+  final String id;
+  final String actionId;
+  final String connectorId;
+  final String? externalId;
+  final String outcome;
+  final String requestFingerprint;
+  final String responseSummary;
+  final DateTime executedAt;
+  const ExecutionReceipt({
+    required this.id,
+    required this.actionId,
+    required this.connectorId,
+    this.externalId,
+    required this.outcome,
+    required this.requestFingerprint,
+    required this.responseSummary,
+    required this.executedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['action_id'] = Variable<String>(actionId);
+    map['connector_id'] = Variable<String>(connectorId);
+    if (!nullToAbsent || externalId != null) {
+      map['external_id'] = Variable<String>(externalId);
+    }
+    map['outcome'] = Variable<String>(outcome);
+    map['request_fingerprint'] = Variable<String>(requestFingerprint);
+    map['response_summary'] = Variable<String>(responseSummary);
+    {
+      map['executed_at'] = Variable<int>(
+        $ExecutionReceiptsTable.$converterexecutedAt.toSql(executedAt),
+      );
+    }
+    return map;
+  }
+
+  ExecutionReceiptsCompanion toCompanion(bool nullToAbsent) {
+    return ExecutionReceiptsCompanion(
+      id: Value(id),
+      actionId: Value(actionId),
+      connectorId: Value(connectorId),
+      externalId: externalId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(externalId),
+      outcome: Value(outcome),
+      requestFingerprint: Value(requestFingerprint),
+      responseSummary: Value(responseSummary),
+      executedAt: Value(executedAt),
+    );
+  }
+
+  factory ExecutionReceipt.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ExecutionReceipt(
+      id: serializer.fromJson<String>(json['id']),
+      actionId: serializer.fromJson<String>(json['actionId']),
+      connectorId: serializer.fromJson<String>(json['connectorId']),
+      externalId: serializer.fromJson<String?>(json['externalId']),
+      outcome: serializer.fromJson<String>(json['outcome']),
+      requestFingerprint: serializer.fromJson<String>(
+        json['requestFingerprint'],
+      ),
+      responseSummary: serializer.fromJson<String>(json['responseSummary']),
+      executedAt: serializer.fromJson<DateTime>(json['executedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'actionId': serializer.toJson<String>(actionId),
+      'connectorId': serializer.toJson<String>(connectorId),
+      'externalId': serializer.toJson<String?>(externalId),
+      'outcome': serializer.toJson<String>(outcome),
+      'requestFingerprint': serializer.toJson<String>(requestFingerprint),
+      'responseSummary': serializer.toJson<String>(responseSummary),
+      'executedAt': serializer.toJson<DateTime>(executedAt),
+    };
+  }
+
+  ExecutionReceipt copyWith({
+    String? id,
+    String? actionId,
+    String? connectorId,
+    Value<String?> externalId = const Value.absent(),
+    String? outcome,
+    String? requestFingerprint,
+    String? responseSummary,
+    DateTime? executedAt,
+  }) => ExecutionReceipt(
+    id: id ?? this.id,
+    actionId: actionId ?? this.actionId,
+    connectorId: connectorId ?? this.connectorId,
+    externalId: externalId.present ? externalId.value : this.externalId,
+    outcome: outcome ?? this.outcome,
+    requestFingerprint: requestFingerprint ?? this.requestFingerprint,
+    responseSummary: responseSummary ?? this.responseSummary,
+    executedAt: executedAt ?? this.executedAt,
+  );
+  ExecutionReceipt copyWithCompanion(ExecutionReceiptsCompanion data) {
+    return ExecutionReceipt(
+      id: data.id.present ? data.id.value : this.id,
+      actionId: data.actionId.present ? data.actionId.value : this.actionId,
+      connectorId: data.connectorId.present
+          ? data.connectorId.value
+          : this.connectorId,
+      externalId: data.externalId.present
+          ? data.externalId.value
+          : this.externalId,
+      outcome: data.outcome.present ? data.outcome.value : this.outcome,
+      requestFingerprint: data.requestFingerprint.present
+          ? data.requestFingerprint.value
+          : this.requestFingerprint,
+      responseSummary: data.responseSummary.present
+          ? data.responseSummary.value
+          : this.responseSummary,
+      executedAt: data.executedAt.present
+          ? data.executedAt.value
+          : this.executedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExecutionReceipt(')
+          ..write('id: $id, ')
+          ..write('actionId: $actionId, ')
+          ..write('connectorId: $connectorId, ')
+          ..write('externalId: $externalId, ')
+          ..write('outcome: $outcome, ')
+          ..write('requestFingerprint: $requestFingerprint, ')
+          ..write('responseSummary: $responseSummary, ')
+          ..write('executedAt: $executedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    actionId,
+    connectorId,
+    externalId,
+    outcome,
+    requestFingerprint,
+    responseSummary,
+    executedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ExecutionReceipt &&
+          other.id == this.id &&
+          other.actionId == this.actionId &&
+          other.connectorId == this.connectorId &&
+          other.externalId == this.externalId &&
+          other.outcome == this.outcome &&
+          other.requestFingerprint == this.requestFingerprint &&
+          other.responseSummary == this.responseSummary &&
+          other.executedAt == this.executedAt);
+}
+
+class ExecutionReceiptsCompanion extends UpdateCompanion<ExecutionReceipt> {
+  final Value<String> id;
+  final Value<String> actionId;
+  final Value<String> connectorId;
+  final Value<String?> externalId;
+  final Value<String> outcome;
+  final Value<String> requestFingerprint;
+  final Value<String> responseSummary;
+  final Value<DateTime> executedAt;
+  final Value<int> rowid;
+  const ExecutionReceiptsCompanion({
+    this.id = const Value.absent(),
+    this.actionId = const Value.absent(),
+    this.connectorId = const Value.absent(),
+    this.externalId = const Value.absent(),
+    this.outcome = const Value.absent(),
+    this.requestFingerprint = const Value.absent(),
+    this.responseSummary = const Value.absent(),
+    this.executedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ExecutionReceiptsCompanion.insert({
+    required String id,
+    required String actionId,
+    required String connectorId,
+    this.externalId = const Value.absent(),
+    required String outcome,
+    required String requestFingerprint,
+    required String responseSummary,
+    required DateTime executedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       actionId = Value(actionId),
+       connectorId = Value(connectorId),
+       outcome = Value(outcome),
+       requestFingerprint = Value(requestFingerprint),
+       responseSummary = Value(responseSummary),
+       executedAt = Value(executedAt);
+  static Insertable<ExecutionReceipt> custom({
+    Expression<String>? id,
+    Expression<String>? actionId,
+    Expression<String>? connectorId,
+    Expression<String>? externalId,
+    Expression<String>? outcome,
+    Expression<String>? requestFingerprint,
+    Expression<String>? responseSummary,
+    Expression<int>? executedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (actionId != null) 'action_id': actionId,
+      if (connectorId != null) 'connector_id': connectorId,
+      if (externalId != null) 'external_id': externalId,
+      if (outcome != null) 'outcome': outcome,
+      if (requestFingerprint != null) 'request_fingerprint': requestFingerprint,
+      if (responseSummary != null) 'response_summary': responseSummary,
+      if (executedAt != null) 'executed_at': executedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ExecutionReceiptsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? actionId,
+    Value<String>? connectorId,
+    Value<String?>? externalId,
+    Value<String>? outcome,
+    Value<String>? requestFingerprint,
+    Value<String>? responseSummary,
+    Value<DateTime>? executedAt,
+    Value<int>? rowid,
+  }) {
+    return ExecutionReceiptsCompanion(
+      id: id ?? this.id,
+      actionId: actionId ?? this.actionId,
+      connectorId: connectorId ?? this.connectorId,
+      externalId: externalId ?? this.externalId,
+      outcome: outcome ?? this.outcome,
+      requestFingerprint: requestFingerprint ?? this.requestFingerprint,
+      responseSummary: responseSummary ?? this.responseSummary,
+      executedAt: executedAt ?? this.executedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (actionId.present) {
+      map['action_id'] = Variable<String>(actionId.value);
+    }
+    if (connectorId.present) {
+      map['connector_id'] = Variable<String>(connectorId.value);
+    }
+    if (externalId.present) {
+      map['external_id'] = Variable<String>(externalId.value);
+    }
+    if (outcome.present) {
+      map['outcome'] = Variable<String>(outcome.value);
+    }
+    if (requestFingerprint.present) {
+      map['request_fingerprint'] = Variable<String>(requestFingerprint.value);
+    }
+    if (responseSummary.present) {
+      map['response_summary'] = Variable<String>(responseSummary.value);
+    }
+    if (executedAt.present) {
+      map['executed_at'] = Variable<int>(
+        $ExecutionReceiptsTable.$converterexecutedAt.toSql(executedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExecutionReceiptsCompanion(')
+          ..write('id: $id, ')
+          ..write('actionId: $actionId, ')
+          ..write('connectorId: $connectorId, ')
+          ..write('externalId: $externalId, ')
+          ..write('outcome: $outcome, ')
+          ..write('requestFingerprint: $requestFingerprint, ')
+          ..write('responseSummary: $responseSummary, ')
+          ..write('executedAt: $executedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ConnectorConfigsTable extends ConnectorConfigs
+    with TableInfo<$ConnectorConfigsTable, ConnectorConfig> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ConnectorConfigsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _connectorTypeMeta = const VerificationMeta(
+    'connectorType',
+  );
+  @override
+  late final GeneratedColumn<String> connectorType = GeneratedColumn<String>(
+    'connector_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _displayNameMeta = const VerificationMeta(
+    'displayName',
+  );
+  @override
+  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
+    'display_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _configJsonMeta = const VerificationMeta(
+    'configJson',
+  );
+  @override
+  late final GeneratedColumn<String> configJson = GeneratedColumn<String>(
+    'config_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _secretRefMeta = const VerificationMeta(
+    'secretRef',
+  );
+  @override
+  late final GeneratedColumn<String> secretRef = GeneratedColumn<String>(
+    'secret_ref',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> updatedAt =
+      GeneratedColumn<int>(
+        'updated_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($ConnectorConfigsTable.$converterupdatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    connectorType,
+    displayName,
+    configJson,
+    secretRef,
+    enabled,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'connector_configs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ConnectorConfig> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('connector_type')) {
+      context.handle(
+        _connectorTypeMeta,
+        connectorType.isAcceptableOrUnknown(
+          data['connector_type']!,
+          _connectorTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_connectorTypeMeta);
+    }
+    if (data.containsKey('display_name')) {
+      context.handle(
+        _displayNameMeta,
+        displayName.isAcceptableOrUnknown(
+          data['display_name']!,
+          _displayNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_displayNameMeta);
+    }
+    if (data.containsKey('config_json')) {
+      context.handle(
+        _configJsonMeta,
+        configJson.isAcceptableOrUnknown(data['config_json']!, _configJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_configJsonMeta);
+    }
+    if (data.containsKey('secret_ref')) {
+      context.handle(
+        _secretRefMeta,
+        secretRef.isAcceptableOrUnknown(data['secret_ref']!, _secretRefMeta),
+      );
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ConnectorConfig map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ConnectorConfig(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      connectorType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}connector_type'],
+      )!,
+      displayName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_name'],
+      )!,
+      configJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}config_json'],
+      )!,
+      secretRef: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}secret_ref'],
+      ),
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+      updatedAt: $ConnectorConfigsTable.$converterupdatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}updated_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $ConnectorConfigsTable createAlias(String alias) {
+    return $ConnectorConfigsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $converterupdatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class ConnectorConfig extends DataClass implements Insertable<ConnectorConfig> {
+  final String id;
+  final String connectorType;
+  final String displayName;
+  final String configJson;
+  final String? secretRef;
+  final bool enabled;
+  final DateTime updatedAt;
+  const ConnectorConfig({
+    required this.id,
+    required this.connectorType,
+    required this.displayName,
+    required this.configJson,
+    this.secretRef,
+    required this.enabled,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['connector_type'] = Variable<String>(connectorType);
+    map['display_name'] = Variable<String>(displayName);
+    map['config_json'] = Variable<String>(configJson);
+    if (!nullToAbsent || secretRef != null) {
+      map['secret_ref'] = Variable<String>(secretRef);
+    }
+    map['enabled'] = Variable<bool>(enabled);
+    {
+      map['updated_at'] = Variable<int>(
+        $ConnectorConfigsTable.$converterupdatedAt.toSql(updatedAt),
+      );
+    }
+    return map;
+  }
+
+  ConnectorConfigsCompanion toCompanion(bool nullToAbsent) {
+    return ConnectorConfigsCompanion(
+      id: Value(id),
+      connectorType: Value(connectorType),
+      displayName: Value(displayName),
+      configJson: Value(configJson),
+      secretRef: secretRef == null && nullToAbsent
+          ? const Value.absent()
+          : Value(secretRef),
+      enabled: Value(enabled),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory ConnectorConfig.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ConnectorConfig(
+      id: serializer.fromJson<String>(json['id']),
+      connectorType: serializer.fromJson<String>(json['connectorType']),
+      displayName: serializer.fromJson<String>(json['displayName']),
+      configJson: serializer.fromJson<String>(json['configJson']),
+      secretRef: serializer.fromJson<String?>(json['secretRef']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'connectorType': serializer.toJson<String>(connectorType),
+      'displayName': serializer.toJson<String>(displayName),
+      'configJson': serializer.toJson<String>(configJson),
+      'secretRef': serializer.toJson<String?>(secretRef),
+      'enabled': serializer.toJson<bool>(enabled),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  ConnectorConfig copyWith({
+    String? id,
+    String? connectorType,
+    String? displayName,
+    String? configJson,
+    Value<String?> secretRef = const Value.absent(),
+    bool? enabled,
+    DateTime? updatedAt,
+  }) => ConnectorConfig(
+    id: id ?? this.id,
+    connectorType: connectorType ?? this.connectorType,
+    displayName: displayName ?? this.displayName,
+    configJson: configJson ?? this.configJson,
+    secretRef: secretRef.present ? secretRef.value : this.secretRef,
+    enabled: enabled ?? this.enabled,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  ConnectorConfig copyWithCompanion(ConnectorConfigsCompanion data) {
+    return ConnectorConfig(
+      id: data.id.present ? data.id.value : this.id,
+      connectorType: data.connectorType.present
+          ? data.connectorType.value
+          : this.connectorType,
+      displayName: data.displayName.present
+          ? data.displayName.value
+          : this.displayName,
+      configJson: data.configJson.present
+          ? data.configJson.value
+          : this.configJson,
+      secretRef: data.secretRef.present ? data.secretRef.value : this.secretRef,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ConnectorConfig(')
+          ..write('id: $id, ')
+          ..write('connectorType: $connectorType, ')
+          ..write('displayName: $displayName, ')
+          ..write('configJson: $configJson, ')
+          ..write('secretRef: $secretRef, ')
+          ..write('enabled: $enabled, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    connectorType,
+    displayName,
+    configJson,
+    secretRef,
+    enabled,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ConnectorConfig &&
+          other.id == this.id &&
+          other.connectorType == this.connectorType &&
+          other.displayName == this.displayName &&
+          other.configJson == this.configJson &&
+          other.secretRef == this.secretRef &&
+          other.enabled == this.enabled &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ConnectorConfigsCompanion extends UpdateCompanion<ConnectorConfig> {
+  final Value<String> id;
+  final Value<String> connectorType;
+  final Value<String> displayName;
+  final Value<String> configJson;
+  final Value<String?> secretRef;
+  final Value<bool> enabled;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const ConnectorConfigsCompanion({
+    this.id = const Value.absent(),
+    this.connectorType = const Value.absent(),
+    this.displayName = const Value.absent(),
+    this.configJson = const Value.absent(),
+    this.secretRef = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ConnectorConfigsCompanion.insert({
+    required String id,
+    required String connectorType,
+    required String displayName,
+    required String configJson,
+    this.secretRef = const Value.absent(),
+    this.enabled = const Value.absent(),
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       connectorType = Value(connectorType),
+       displayName = Value(displayName),
+       configJson = Value(configJson),
+       updatedAt = Value(updatedAt);
+  static Insertable<ConnectorConfig> custom({
+    Expression<String>? id,
+    Expression<String>? connectorType,
+    Expression<String>? displayName,
+    Expression<String>? configJson,
+    Expression<String>? secretRef,
+    Expression<bool>? enabled,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (connectorType != null) 'connector_type': connectorType,
+      if (displayName != null) 'display_name': displayName,
+      if (configJson != null) 'config_json': configJson,
+      if (secretRef != null) 'secret_ref': secretRef,
+      if (enabled != null) 'enabled': enabled,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ConnectorConfigsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? connectorType,
+    Value<String>? displayName,
+    Value<String>? configJson,
+    Value<String?>? secretRef,
+    Value<bool>? enabled,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return ConnectorConfigsCompanion(
+      id: id ?? this.id,
+      connectorType: connectorType ?? this.connectorType,
+      displayName: displayName ?? this.displayName,
+      configJson: configJson ?? this.configJson,
+      secretRef: secretRef ?? this.secretRef,
+      enabled: enabled ?? this.enabled,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (connectorType.present) {
+      map['connector_type'] = Variable<String>(connectorType.value);
+    }
+    if (displayName.present) {
+      map['display_name'] = Variable<String>(displayName.value);
+    }
+    if (configJson.present) {
+      map['config_json'] = Variable<String>(configJson.value);
+    }
+    if (secretRef.present) {
+      map['secret_ref'] = Variable<String>(secretRef.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(
+        $ConnectorConfigsTable.$converterupdatedAt.toSql(updatedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ConnectorConfigsCompanion(')
+          ..write('id: $id, ')
+          ..write('connectorType: $connectorType, ')
+          ..write('displayName: $displayName, ')
+          ..write('configJson: $configJson, ')
+          ..write('secretRef: $secretRef, ')
+          ..write('enabled: $enabled, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $InboxAuditEventsTable extends InboxAuditEvents
+    with TableInfo<$InboxAuditEventsTable, InboxAuditEvent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InboxAuditEventsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
+    'item_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _actionIdMeta = const VerificationMeta(
+    'actionId',
+  );
+  @override
+  late final GeneratedColumn<String> actionId = GeneratedColumn<String>(
+    'action_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _eventTypeMeta = const VerificationMeta(
+    'eventType',
+  );
+  @override
+  late final GeneratedColumn<String> eventType = GeneratedColumn<String>(
+    'event_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> timestamp =
+      GeneratedColumn<int>(
+        'timestamp',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxAuditEventsTable.$convertertimestamp);
+  static const VerificationMeta _detailsJsonMeta = const VerificationMeta(
+    'detailsJson',
+  );
+  @override
+  late final GeneratedColumn<String> detailsJson = GeneratedColumn<String>(
+    'details_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    itemId,
+    actionId,
+    eventType,
+    timestamp,
+    detailsJson,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'inbox_audit_events';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InboxAuditEvent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(
+        _itemIdMeta,
+        itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta),
+      );
+    }
+    if (data.containsKey('action_id')) {
+      context.handle(
+        _actionIdMeta,
+        actionId.isAcceptableOrUnknown(data['action_id']!, _actionIdMeta),
+      );
+    }
+    if (data.containsKey('event_type')) {
+      context.handle(
+        _eventTypeMeta,
+        eventType.isAcceptableOrUnknown(data['event_type']!, _eventTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_eventTypeMeta);
+    }
+    if (data.containsKey('details_json')) {
+      context.handle(
+        _detailsJsonMeta,
+        detailsJson.isAcceptableOrUnknown(
+          data['details_json']!,
+          _detailsJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_detailsJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InboxAuditEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InboxAuditEvent(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      ),
+      actionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}action_id'],
+      ),
+      eventType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}event_type'],
+      )!,
+      timestamp: $InboxAuditEventsTable.$convertertimestamp.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}timestamp'],
+        )!,
+      ),
+      detailsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}details_json'],
+      )!,
+    );
+  }
+
+  @override
+  $InboxAuditEventsTable createAlias(String alias) {
+    return $InboxAuditEventsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertertimestamp =
+      const MicrosecondDateTimeConverter();
+}
+
+class InboxAuditEvent extends DataClass implements Insertable<InboxAuditEvent> {
+  final String id;
+  final String? itemId;
+  final String? actionId;
+  final String eventType;
+  final DateTime timestamp;
+  final String detailsJson;
+  const InboxAuditEvent({
+    required this.id,
+    this.itemId,
+    this.actionId,
+    required this.eventType,
+    required this.timestamp,
+    required this.detailsJson,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    if (!nullToAbsent || itemId != null) {
+      map['item_id'] = Variable<String>(itemId);
+    }
+    if (!nullToAbsent || actionId != null) {
+      map['action_id'] = Variable<String>(actionId);
+    }
+    map['event_type'] = Variable<String>(eventType);
+    {
+      map['timestamp'] = Variable<int>(
+        $InboxAuditEventsTable.$convertertimestamp.toSql(timestamp),
+      );
+    }
+    map['details_json'] = Variable<String>(detailsJson);
+    return map;
+  }
+
+  InboxAuditEventsCompanion toCompanion(bool nullToAbsent) {
+    return InboxAuditEventsCompanion(
+      id: Value(id),
+      itemId: itemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(itemId),
+      actionId: actionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(actionId),
+      eventType: Value(eventType),
+      timestamp: Value(timestamp),
+      detailsJson: Value(detailsJson),
+    );
+  }
+
+  factory InboxAuditEvent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InboxAuditEvent(
+      id: serializer.fromJson<String>(json['id']),
+      itemId: serializer.fromJson<String?>(json['itemId']),
+      actionId: serializer.fromJson<String?>(json['actionId']),
+      eventType: serializer.fromJson<String>(json['eventType']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      detailsJson: serializer.fromJson<String>(json['detailsJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'itemId': serializer.toJson<String?>(itemId),
+      'actionId': serializer.toJson<String?>(actionId),
+      'eventType': serializer.toJson<String>(eventType),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'detailsJson': serializer.toJson<String>(detailsJson),
+    };
+  }
+
+  InboxAuditEvent copyWith({
+    String? id,
+    Value<String?> itemId = const Value.absent(),
+    Value<String?> actionId = const Value.absent(),
+    String? eventType,
+    DateTime? timestamp,
+    String? detailsJson,
+  }) => InboxAuditEvent(
+    id: id ?? this.id,
+    itemId: itemId.present ? itemId.value : this.itemId,
+    actionId: actionId.present ? actionId.value : this.actionId,
+    eventType: eventType ?? this.eventType,
+    timestamp: timestamp ?? this.timestamp,
+    detailsJson: detailsJson ?? this.detailsJson,
+  );
+  InboxAuditEvent copyWithCompanion(InboxAuditEventsCompanion data) {
+    return InboxAuditEvent(
+      id: data.id.present ? data.id.value : this.id,
+      itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      actionId: data.actionId.present ? data.actionId.value : this.actionId,
+      eventType: data.eventType.present ? data.eventType.value : this.eventType,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+      detailsJson: data.detailsJson.present
+          ? data.detailsJson.value
+          : this.detailsJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxAuditEvent(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('actionId: $actionId, ')
+          ..write('eventType: $eventType, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('detailsJson: $detailsJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, itemId, actionId, eventType, timestamp, detailsJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InboxAuditEvent &&
+          other.id == this.id &&
+          other.itemId == this.itemId &&
+          other.actionId == this.actionId &&
+          other.eventType == this.eventType &&
+          other.timestamp == this.timestamp &&
+          other.detailsJson == this.detailsJson);
+}
+
+class InboxAuditEventsCompanion extends UpdateCompanion<InboxAuditEvent> {
+  final Value<String> id;
+  final Value<String?> itemId;
+  final Value<String?> actionId;
+  final Value<String> eventType;
+  final Value<DateTime> timestamp;
+  final Value<String> detailsJson;
+  final Value<int> rowid;
+  const InboxAuditEventsCompanion({
+    this.id = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.actionId = const Value.absent(),
+    this.eventType = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.detailsJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InboxAuditEventsCompanion.insert({
+    required String id,
+    this.itemId = const Value.absent(),
+    this.actionId = const Value.absent(),
+    required String eventType,
+    required DateTime timestamp,
+    required String detailsJson,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       eventType = Value(eventType),
+       timestamp = Value(timestamp),
+       detailsJson = Value(detailsJson);
+  static Insertable<InboxAuditEvent> custom({
+    Expression<String>? id,
+    Expression<String>? itemId,
+    Expression<String>? actionId,
+    Expression<String>? eventType,
+    Expression<int>? timestamp,
+    Expression<String>? detailsJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemId != null) 'item_id': itemId,
+      if (actionId != null) 'action_id': actionId,
+      if (eventType != null) 'event_type': eventType,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (detailsJson != null) 'details_json': detailsJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InboxAuditEventsCompanion copyWith({
+    Value<String>? id,
+    Value<String?>? itemId,
+    Value<String?>? actionId,
+    Value<String>? eventType,
+    Value<DateTime>? timestamp,
+    Value<String>? detailsJson,
+    Value<int>? rowid,
+  }) {
+    return InboxAuditEventsCompanion(
+      id: id ?? this.id,
+      itemId: itemId ?? this.itemId,
+      actionId: actionId ?? this.actionId,
+      eventType: eventType ?? this.eventType,
+      timestamp: timestamp ?? this.timestamp,
+      detailsJson: detailsJson ?? this.detailsJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (actionId.present) {
+      map['action_id'] = Variable<String>(actionId.value);
+    }
+    if (eventType.present) {
+      map['event_type'] = Variable<String>(eventType.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<int>(
+        $InboxAuditEventsTable.$convertertimestamp.toSql(timestamp.value),
+      );
+    }
+    if (detailsJson.present) {
+      map['details_json'] = Variable<String>(detailsJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxAuditEventsCompanion(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('actionId: $actionId, ')
+          ..write('eventType: $eventType, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('detailsJson: $detailsJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -14454,6 +17188,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $ExtractedEventsTable extractedEvents = $ExtractedEventsTable(
+    this,
+  );
+  late final $InboxActionPlansTable inboxActionPlans = $InboxActionPlansTable(
+    this,
+  );
+  late final $PlannedActionsTable plannedActions = $PlannedActionsTable(this);
+  late final $ExecutionReceiptsTable executionReceipts =
+      $ExecutionReceiptsTable(this);
+  late final $ConnectorConfigsTable connectorConfigs = $ConnectorConfigsTable(
+    this,
+  );
+  late final $InboxAuditEventsTable inboxAuditEvents = $InboxAuditEventsTable(
     this,
   );
   late final Index idxConversationsUpdatedAt = Index(
@@ -14540,6 +17286,22 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_extracted_events_item',
     'CREATE INDEX idx_extracted_events_item ON extracted_events (item_id)',
   );
+  late final Index idxPlannedActionsPlan = Index(
+    'idx_planned_actions_plan',
+    'CREATE INDEX idx_planned_actions_plan ON planned_actions (plan_id)',
+  );
+  late final Index idxPlannedActionsIdempotency = Index(
+    'idx_planned_actions_idempotency',
+    'CREATE INDEX idx_planned_actions_idempotency ON planned_actions (idempotency_key)',
+  );
+  late final Index idxExecutionReceiptsAction = Index(
+    'idx_execution_receipts_action',
+    'CREATE INDEX idx_execution_receipts_action ON execution_receipts (action_id)',
+  );
+  late final Index idxAuditEventsItem = Index(
+    'idx_audit_events_item',
+    'CREATE INDEX idx_audit_events_item ON inbox_audit_events (item_id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -14582,6 +17344,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     inboxItems,
     inboxAttachments,
     extractedEvents,
+    inboxActionPlans,
+    plannedActions,
+    executionReceipts,
+    connectorConfigs,
+    inboxAuditEvents,
     idxConversationsUpdatedAt,
     idxConversationsAssistant,
     idxMessagesConversationOrder,
@@ -14603,6 +17370,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idxInboxItemsContentHash,
     idxInboxAttachmentsItem,
     idxExtractedEventsItem,
+    idxPlannedActionsPlan,
+    idxPlannedActionsIdempotency,
+    idxExecutionReceiptsAction,
+    idxAuditEventsItem,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -14705,6 +17476,27 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('extracted_events', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'inbox_items',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('inbox_action_plans', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'inbox_action_plans',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('planned_actions', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'planned_actions',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('execution_receipts', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -23763,6 +26555,26 @@ final class $$InboxItemsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$InboxActionPlansTable, List<InboxActionPlan>>
+  _inboxActionPlansRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.inboxActionPlans,
+    aliasName: 'inbox_items__id__inbox_action_plans__item_id',
+  );
+
+  $$InboxActionPlansTableProcessedTableManager get inboxActionPlansRefs {
+    final manager = $$InboxActionPlansTableTableManager(
+      $_db,
+      $_db.inboxActionPlans,
+    ).filter((f) => f.itemId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _inboxActionPlansRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$InboxItemsTableFilterComposer
@@ -23862,6 +26674,31 @@ class $$InboxItemsTableFilterComposer
           }) => $$ExtractedEventsTableFilterComposer(
             $db: $db,
             $table: $db.extractedEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> inboxActionPlansRefs(
+    Expression<bool> Function($$InboxActionPlansTableFilterComposer f) f,
+  ) {
+    final $$InboxActionPlansTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.inboxActionPlans,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxActionPlansTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxActionPlans,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -24019,6 +26856,31 @@ class $$InboxItemsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> inboxActionPlansRefs<T extends Object>(
+    Expression<T> Function($$InboxActionPlansTableAnnotationComposer a) f,
+  ) {
+    final $$InboxActionPlansTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.inboxActionPlans,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxActionPlansTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxActionPlans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$InboxItemsTableTableManager
@@ -24037,6 +26899,7 @@ class $$InboxItemsTableTableManager
           PrefetchHooks Function({
             bool inboxAttachmentsRefs,
             bool extractedEventsRefs,
+            bool inboxActionPlansRefs,
           })
         > {
   $$InboxItemsTableTableManager(_$AppDatabase db, $InboxItemsTable table)
@@ -24107,12 +26970,17 @@ class $$InboxItemsTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({inboxAttachmentsRefs = false, extractedEventsRefs = false}) {
+              ({
+                inboxAttachmentsRefs = false,
+                extractedEventsRefs = false,
+                inboxActionPlansRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (inboxAttachmentsRefs) db.inboxAttachments,
                     if (extractedEventsRefs) db.extractedEvents,
+                    if (inboxActionPlansRefs) db.inboxActionPlans,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -24157,6 +27025,26 @@ class $$InboxItemsTableTableManager
                           referencedColumn: 'item_id',
                           typedResults: items,
                         ),
+                      if (inboxActionPlansRefs)
+                        await $_getPrefetchedDataByColumns<
+                          InboxItem,
+                          $InboxItemsTable,
+                          InboxActionPlan,
+                          $InboxActionPlansTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$InboxItemsTableReferences
+                              ._inboxActionPlansRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$InboxItemsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).inboxActionPlansRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'item_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -24180,6 +27068,7 @@ typedef $$InboxItemsTableProcessedTableManager =
       PrefetchHooks Function({
         bool inboxAttachmentsRefs,
         bool extractedEventsRefs,
+        bool inboxActionPlansRefs,
       })
     >;
 typedef $$InboxAttachmentsTableCreateCompanionBuilder =
@@ -24960,6 +27849,1975 @@ typedef $$ExtractedEventsTableProcessedTableManager =
       ExtractedEvent,
       PrefetchHooks Function({bool itemId})
     >;
+typedef $$InboxActionPlansTableCreateCompanionBuilder =
+    InboxActionPlansCompanion Function({
+      required String id,
+      required String itemId,
+      required int version,
+      required String status,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$InboxActionPlansTableUpdateCompanionBuilder =
+    InboxActionPlansCompanion Function({
+      Value<String> id,
+      Value<String> itemId,
+      Value<int> version,
+      Value<String> status,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$InboxActionPlansTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $InboxActionPlansTable, InboxActionPlan> {
+  $$InboxActionPlansTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $InboxItemsTable _itemIdTable(_$AppDatabase db) =>
+      db.inboxItems.createAlias('inbox_action_plans__item_id__inbox_items__id');
+
+  $$InboxItemsTableProcessedTableManager get itemId {
+    final $_column = $_itemColumn<String>('item_id')!;
+
+    final manager = $$InboxItemsTableTableManager(
+      $_db,
+      $_db.inboxItems,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_itemIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$PlannedActionsTable, List<PlannedAction>>
+  _plannedActionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.plannedActions,
+    aliasName: 'inbox_action_plans__id__planned_actions__plan_id',
+  );
+
+  $$PlannedActionsTableProcessedTableManager get plannedActionsRefs {
+    final manager = $$PlannedActionsTableTableManager(
+      $_db,
+      $_db.plannedActions,
+    ).filter((f) => f.planId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_plannedActionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$InboxActionPlansTableFilterComposer
+    extends Composer<_$AppDatabase, $InboxActionPlansTable> {
+  $$InboxActionPlansTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get updatedAt =>
+      $composableBuilder(
+        column: $table.updatedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$InboxItemsTableFilterComposer get itemId {
+    final $$InboxItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> plannedActionsRefs(
+    Expression<bool> Function($$PlannedActionsTableFilterComposer f) f,
+  ) {
+    final $$PlannedActionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.plannedActions,
+      getReferencedColumn: (t) => t.planId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlannedActionsTableFilterComposer(
+            $db: $db,
+            $table: $db.plannedActions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InboxActionPlansTableOrderingComposer
+    extends Composer<_$AppDatabase, $InboxActionPlansTable> {
+  $$InboxActionPlansTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$InboxItemsTableOrderingComposer get itemId {
+    final $$InboxItemsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableOrderingComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InboxActionPlansTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InboxActionPlansTable> {
+  $$InboxActionPlansTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$InboxItemsTableAnnotationComposer get itemId {
+    final $$InboxItemsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> plannedActionsRefs<T extends Object>(
+    Expression<T> Function($$PlannedActionsTableAnnotationComposer a) f,
+  ) {
+    final $$PlannedActionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.plannedActions,
+      getReferencedColumn: (t) => t.planId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlannedActionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.plannedActions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InboxActionPlansTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $InboxActionPlansTable,
+          InboxActionPlan,
+          $$InboxActionPlansTableFilterComposer,
+          $$InboxActionPlansTableOrderingComposer,
+          $$InboxActionPlansTableAnnotationComposer,
+          $$InboxActionPlansTableCreateCompanionBuilder,
+          $$InboxActionPlansTableUpdateCompanionBuilder,
+          (InboxActionPlan, $$InboxActionPlansTableReferences),
+          InboxActionPlan,
+          PrefetchHooks Function({bool itemId, bool plannedActionsRefs})
+        > {
+  $$InboxActionPlansTableTableManager(
+    _$AppDatabase db,
+    $InboxActionPlansTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InboxActionPlansTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InboxActionPlansTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InboxActionPlansTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> itemId = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InboxActionPlansCompanion(
+                id: id,
+                itemId: itemId,
+                version: version,
+                status: status,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String itemId,
+                required int version,
+                required String status,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => InboxActionPlansCompanion.insert(
+                id: id,
+                itemId: itemId,
+                version: version,
+                status: status,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$InboxActionPlansTable, InboxActionPlan>(table),
+                  $$InboxActionPlansTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({itemId = false, plannedActionsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (plannedActionsRefs) db.plannedActions,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (itemId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.itemId,
+                                    referencedTable:
+                                        $$InboxActionPlansTableReferences
+                                            ._itemIdTable(db),
+                                    referencedColumn:
+                                        $$InboxActionPlansTableReferences
+                                            ._itemIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (plannedActionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          InboxActionPlan,
+                          $InboxActionPlansTable,
+                          PlannedAction,
+                          $PlannedActionsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$InboxActionPlansTableReferences
+                              ._plannedActionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$InboxActionPlansTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).plannedActionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'plan_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$InboxActionPlansTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $InboxActionPlansTable,
+      InboxActionPlan,
+      $$InboxActionPlansTableFilterComposer,
+      $$InboxActionPlansTableOrderingComposer,
+      $$InboxActionPlansTableAnnotationComposer,
+      $$InboxActionPlansTableCreateCompanionBuilder,
+      $$InboxActionPlansTableUpdateCompanionBuilder,
+      (InboxActionPlan, $$InboxActionPlansTableReferences),
+      InboxActionPlan,
+      PrefetchHooks Function({bool itemId, bool plannedActionsRefs})
+    >;
+typedef $$PlannedActionsTableCreateCompanionBuilder =
+    PlannedActionsCompanion Function({
+      required String id,
+      required String planId,
+      required String entityType,
+      required String operation,
+      required String connectorId,
+      Value<String?> targetExternalId,
+      required String fieldsJson,
+      Value<String?> beforeJson,
+      required String evidenceJson,
+      required String certainty,
+      required String risk,
+      Value<String> approvalState,
+      required String idempotencyKey,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$PlannedActionsTableUpdateCompanionBuilder =
+    PlannedActionsCompanion Function({
+      Value<String> id,
+      Value<String> planId,
+      Value<String> entityType,
+      Value<String> operation,
+      Value<String> connectorId,
+      Value<String?> targetExternalId,
+      Value<String> fieldsJson,
+      Value<String?> beforeJson,
+      Value<String> evidenceJson,
+      Value<String> certainty,
+      Value<String> risk,
+      Value<String> approvalState,
+      Value<String> idempotencyKey,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$PlannedActionsTableReferences
+    extends BaseReferences<_$AppDatabase, $PlannedActionsTable, PlannedAction> {
+  $$PlannedActionsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $InboxActionPlansTable _planIdTable(_$AppDatabase db) => db
+      .inboxActionPlans
+      .createAlias('planned_actions__plan_id__inbox_action_plans__id');
+
+  $$InboxActionPlansTableProcessedTableManager get planId {
+    final $_column = $_itemColumn<String>('plan_id')!;
+
+    final manager = $$InboxActionPlansTableTableManager(
+      $_db,
+      $_db.inboxActionPlans,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_planIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$ExecutionReceiptsTable, List<ExecutionReceipt>>
+  _executionReceiptsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.executionReceipts,
+        aliasName: 'planned_actions__id__execution_receipts__action_id',
+      );
+
+  $$ExecutionReceiptsTableProcessedTableManager get executionReceiptsRefs {
+    final manager = $$ExecutionReceiptsTableTableManager(
+      $_db,
+      $_db.executionReceipts,
+    ).filter((f) => f.actionId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _executionReceiptsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$PlannedActionsTableFilterComposer
+    extends Composer<_$AppDatabase, $PlannedActionsTable> {
+  $$PlannedActionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get operation => $composableBuilder(
+    column: $table.operation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetExternalId => $composableBuilder(
+    column: $table.targetExternalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get certainty => $composableBuilder(
+    column: $table.certainty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get risk => $composableBuilder(
+    column: $table.risk,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get approvalState => $composableBuilder(
+    column: $table.approvalState,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get idempotencyKey => $composableBuilder(
+    column: $table.idempotencyKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get updatedAt =>
+      $composableBuilder(
+        column: $table.updatedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$InboxActionPlansTableFilterComposer get planId {
+    final $$InboxActionPlansTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.inboxActionPlans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxActionPlansTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxActionPlans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> executionReceiptsRefs(
+    Expression<bool> Function($$ExecutionReceiptsTableFilterComposer f) f,
+  ) {
+    final $$ExecutionReceiptsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.executionReceipts,
+      getReferencedColumn: (t) => t.actionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ExecutionReceiptsTableFilterComposer(
+            $db: $db,
+            $table: $db.executionReceipts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$PlannedActionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PlannedActionsTable> {
+  $$PlannedActionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get operation => $composableBuilder(
+    column: $table.operation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetExternalId => $composableBuilder(
+    column: $table.targetExternalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get certainty => $composableBuilder(
+    column: $table.certainty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get risk => $composableBuilder(
+    column: $table.risk,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get approvalState => $composableBuilder(
+    column: $table.approvalState,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get idempotencyKey => $composableBuilder(
+    column: $table.idempotencyKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$InboxActionPlansTableOrderingComposer get planId {
+    final $$InboxActionPlansTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.inboxActionPlans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxActionPlansTableOrderingComposer(
+            $db: $db,
+            $table: $db.inboxActionPlans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PlannedActionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PlannedActionsTable> {
+  $$PlannedActionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get operation =>
+      $composableBuilder(column: $table.operation, builder: (column) => column);
+
+  GeneratedColumn<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get targetExternalId => $composableBuilder(
+    column: $table.targetExternalId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get certainty =>
+      $composableBuilder(column: $table.certainty, builder: (column) => column);
+
+  GeneratedColumn<String> get risk =>
+      $composableBuilder(column: $table.risk, builder: (column) => column);
+
+  GeneratedColumn<String> get approvalState => $composableBuilder(
+    column: $table.approvalState,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get idempotencyKey => $composableBuilder(
+    column: $table.idempotencyKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$InboxActionPlansTableAnnotationComposer get planId {
+    final $$InboxActionPlansTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.inboxActionPlans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxActionPlansTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxActionPlans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> executionReceiptsRefs<T extends Object>(
+    Expression<T> Function($$ExecutionReceiptsTableAnnotationComposer a) f,
+  ) {
+    final $$ExecutionReceiptsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.executionReceipts,
+          getReferencedColumn: (t) => t.actionId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ExecutionReceiptsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.executionReceipts,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$PlannedActionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlannedActionsTable,
+          PlannedAction,
+          $$PlannedActionsTableFilterComposer,
+          $$PlannedActionsTableOrderingComposer,
+          $$PlannedActionsTableAnnotationComposer,
+          $$PlannedActionsTableCreateCompanionBuilder,
+          $$PlannedActionsTableUpdateCompanionBuilder,
+          (PlannedAction, $$PlannedActionsTableReferences),
+          PlannedAction,
+          PrefetchHooks Function({bool planId, bool executionReceiptsRefs})
+        > {
+  $$PlannedActionsTableTableManager(
+    _$AppDatabase db,
+    $PlannedActionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlannedActionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlannedActionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlannedActionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> planId = const Value.absent(),
+                Value<String> entityType = const Value.absent(),
+                Value<String> operation = const Value.absent(),
+                Value<String> connectorId = const Value.absent(),
+                Value<String?> targetExternalId = const Value.absent(),
+                Value<String> fieldsJson = const Value.absent(),
+                Value<String?> beforeJson = const Value.absent(),
+                Value<String> evidenceJson = const Value.absent(),
+                Value<String> certainty = const Value.absent(),
+                Value<String> risk = const Value.absent(),
+                Value<String> approvalState = const Value.absent(),
+                Value<String> idempotencyKey = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlannedActionsCompanion(
+                id: id,
+                planId: planId,
+                entityType: entityType,
+                operation: operation,
+                connectorId: connectorId,
+                targetExternalId: targetExternalId,
+                fieldsJson: fieldsJson,
+                beforeJson: beforeJson,
+                evidenceJson: evidenceJson,
+                certainty: certainty,
+                risk: risk,
+                approvalState: approvalState,
+                idempotencyKey: idempotencyKey,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String planId,
+                required String entityType,
+                required String operation,
+                required String connectorId,
+                Value<String?> targetExternalId = const Value.absent(),
+                required String fieldsJson,
+                Value<String?> beforeJson = const Value.absent(),
+                required String evidenceJson,
+                required String certainty,
+                required String risk,
+                Value<String> approvalState = const Value.absent(),
+                required String idempotencyKey,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => PlannedActionsCompanion.insert(
+                id: id,
+                planId: planId,
+                entityType: entityType,
+                operation: operation,
+                connectorId: connectorId,
+                targetExternalId: targetExternalId,
+                fieldsJson: fieldsJson,
+                beforeJson: beforeJson,
+                evidenceJson: evidenceJson,
+                certainty: certainty,
+                risk: risk,
+                approvalState: approvalState,
+                idempotencyKey: idempotencyKey,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$PlannedActionsTable, PlannedAction>(table),
+                  $$PlannedActionsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({planId = false, executionReceiptsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (executionReceiptsRefs) db.executionReceipts,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (planId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.planId,
+                                    referencedTable:
+                                        $$PlannedActionsTableReferences
+                                            ._planIdTable(db),
+                                    referencedColumn:
+                                        $$PlannedActionsTableReferences
+                                            ._planIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (executionReceiptsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          PlannedAction,
+                          $PlannedActionsTable,
+                          ExecutionReceipt,
+                          $ExecutionReceiptsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$PlannedActionsTableReferences
+                              ._executionReceiptsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$PlannedActionsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).executionReceiptsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'action_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$PlannedActionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlannedActionsTable,
+      PlannedAction,
+      $$PlannedActionsTableFilterComposer,
+      $$PlannedActionsTableOrderingComposer,
+      $$PlannedActionsTableAnnotationComposer,
+      $$PlannedActionsTableCreateCompanionBuilder,
+      $$PlannedActionsTableUpdateCompanionBuilder,
+      (PlannedAction, $$PlannedActionsTableReferences),
+      PlannedAction,
+      PrefetchHooks Function({bool planId, bool executionReceiptsRefs})
+    >;
+typedef $$ExecutionReceiptsTableCreateCompanionBuilder =
+    ExecutionReceiptsCompanion Function({
+      required String id,
+      required String actionId,
+      required String connectorId,
+      Value<String?> externalId,
+      required String outcome,
+      required String requestFingerprint,
+      required String responseSummary,
+      required DateTime executedAt,
+      Value<int> rowid,
+    });
+typedef $$ExecutionReceiptsTableUpdateCompanionBuilder =
+    ExecutionReceiptsCompanion Function({
+      Value<String> id,
+      Value<String> actionId,
+      Value<String> connectorId,
+      Value<String?> externalId,
+      Value<String> outcome,
+      Value<String> requestFingerprint,
+      Value<String> responseSummary,
+      Value<DateTime> executedAt,
+      Value<int> rowid,
+    });
+
+final class $$ExecutionReceiptsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ExecutionReceiptsTable,
+          ExecutionReceipt
+        > {
+  $$ExecutionReceiptsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $PlannedActionsTable _actionIdTable(_$AppDatabase db) => db
+      .plannedActions
+      .createAlias('execution_receipts__action_id__planned_actions__id');
+
+  $$PlannedActionsTableProcessedTableManager get actionId {
+    final $_column = $_itemColumn<String>('action_id')!;
+
+    final manager = $$PlannedActionsTableTableManager(
+      $_db,
+      $_db.plannedActions,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_actionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ExecutionReceiptsTableFilterComposer
+    extends Composer<_$AppDatabase, $ExecutionReceiptsTable> {
+  $$ExecutionReceiptsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get externalId => $composableBuilder(
+    column: $table.externalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get requestFingerprint => $composableBuilder(
+    column: $table.requestFingerprint,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get responseSummary => $composableBuilder(
+    column: $table.responseSummary,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get executedAt =>
+      $composableBuilder(
+        column: $table.executedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$PlannedActionsTableFilterComposer get actionId {
+    final $$PlannedActionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actionId,
+      referencedTable: $db.plannedActions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlannedActionsTableFilterComposer(
+            $db: $db,
+            $table: $db.plannedActions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExecutionReceiptsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ExecutionReceiptsTable> {
+  $$ExecutionReceiptsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get externalId => $composableBuilder(
+    column: $table.externalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get requestFingerprint => $composableBuilder(
+    column: $table.requestFingerprint,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get responseSummary => $composableBuilder(
+    column: $table.responseSummary,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get executedAt => $composableBuilder(
+    column: $table.executedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$PlannedActionsTableOrderingComposer get actionId {
+    final $$PlannedActionsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actionId,
+      referencedTable: $db.plannedActions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlannedActionsTableOrderingComposer(
+            $db: $db,
+            $table: $db.plannedActions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExecutionReceiptsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ExecutionReceiptsTable> {
+  $$ExecutionReceiptsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get connectorId => $composableBuilder(
+    column: $table.connectorId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get externalId => $composableBuilder(
+    column: $table.externalId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get outcome =>
+      $composableBuilder(column: $table.outcome, builder: (column) => column);
+
+  GeneratedColumn<String> get requestFingerprint => $composableBuilder(
+    column: $table.requestFingerprint,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get responseSummary => $composableBuilder(
+    column: $table.responseSummary,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get executedAt =>
+      $composableBuilder(
+        column: $table.executedAt,
+        builder: (column) => column,
+      );
+
+  $$PlannedActionsTableAnnotationComposer get actionId {
+    final $$PlannedActionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actionId,
+      referencedTable: $db.plannedActions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlannedActionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.plannedActions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExecutionReceiptsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ExecutionReceiptsTable,
+          ExecutionReceipt,
+          $$ExecutionReceiptsTableFilterComposer,
+          $$ExecutionReceiptsTableOrderingComposer,
+          $$ExecutionReceiptsTableAnnotationComposer,
+          $$ExecutionReceiptsTableCreateCompanionBuilder,
+          $$ExecutionReceiptsTableUpdateCompanionBuilder,
+          (ExecutionReceipt, $$ExecutionReceiptsTableReferences),
+          ExecutionReceipt,
+          PrefetchHooks Function({bool actionId})
+        > {
+  $$ExecutionReceiptsTableTableManager(
+    _$AppDatabase db,
+    $ExecutionReceiptsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ExecutionReceiptsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ExecutionReceiptsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ExecutionReceiptsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> actionId = const Value.absent(),
+                Value<String> connectorId = const Value.absent(),
+                Value<String?> externalId = const Value.absent(),
+                Value<String> outcome = const Value.absent(),
+                Value<String> requestFingerprint = const Value.absent(),
+                Value<String> responseSummary = const Value.absent(),
+                Value<DateTime> executedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ExecutionReceiptsCompanion(
+                id: id,
+                actionId: actionId,
+                connectorId: connectorId,
+                externalId: externalId,
+                outcome: outcome,
+                requestFingerprint: requestFingerprint,
+                responseSummary: responseSummary,
+                executedAt: executedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String actionId,
+                required String connectorId,
+                Value<String?> externalId = const Value.absent(),
+                required String outcome,
+                required String requestFingerprint,
+                required String responseSummary,
+                required DateTime executedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ExecutionReceiptsCompanion.insert(
+                id: id,
+                actionId: actionId,
+                connectorId: connectorId,
+                externalId: externalId,
+                outcome: outcome,
+                requestFingerprint: requestFingerprint,
+                responseSummary: responseSummary,
+                executedAt: executedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ExecutionReceiptsTable, ExecutionReceipt>(table),
+                  $$ExecutionReceiptsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({actionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (actionId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.actionId,
+                                referencedTable:
+                                    $$ExecutionReceiptsTableReferences
+                                        ._actionIdTable(db),
+                                referencedColumn:
+                                    $$ExecutionReceiptsTableReferences
+                                        ._actionIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ExecutionReceiptsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ExecutionReceiptsTable,
+      ExecutionReceipt,
+      $$ExecutionReceiptsTableFilterComposer,
+      $$ExecutionReceiptsTableOrderingComposer,
+      $$ExecutionReceiptsTableAnnotationComposer,
+      $$ExecutionReceiptsTableCreateCompanionBuilder,
+      $$ExecutionReceiptsTableUpdateCompanionBuilder,
+      (ExecutionReceipt, $$ExecutionReceiptsTableReferences),
+      ExecutionReceipt,
+      PrefetchHooks Function({bool actionId})
+    >;
+typedef $$ConnectorConfigsTableCreateCompanionBuilder =
+    ConnectorConfigsCompanion Function({
+      required String id,
+      required String connectorType,
+      required String displayName,
+      required String configJson,
+      Value<String?> secretRef,
+      Value<bool> enabled,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ConnectorConfigsTableUpdateCompanionBuilder =
+    ConnectorConfigsCompanion Function({
+      Value<String> id,
+      Value<String> connectorType,
+      Value<String> displayName,
+      Value<String> configJson,
+      Value<String?> secretRef,
+      Value<bool> enabled,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$ConnectorConfigsTableFilterComposer
+    extends Composer<_$AppDatabase, $ConnectorConfigsTable> {
+  $$ConnectorConfigsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get connectorType => $composableBuilder(
+    column: $table.connectorType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get configJson => $composableBuilder(
+    column: $table.configJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get secretRef => $composableBuilder(
+    column: $table.secretRef,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get updatedAt =>
+      $composableBuilder(
+        column: $table.updatedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+}
+
+class $$ConnectorConfigsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ConnectorConfigsTable> {
+  $$ConnectorConfigsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get connectorType => $composableBuilder(
+    column: $table.connectorType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get configJson => $composableBuilder(
+    column: $table.configJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get secretRef => $composableBuilder(
+    column: $table.secretRef,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ConnectorConfigsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ConnectorConfigsTable> {
+  $$ConnectorConfigsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get connectorType => $composableBuilder(
+    column: $table.connectorType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get configJson => $composableBuilder(
+    column: $table.configJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get secretRef =>
+      $composableBuilder(column: $table.secretRef, builder: (column) => column);
+
+  GeneratedColumn<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$ConnectorConfigsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ConnectorConfigsTable,
+          ConnectorConfig,
+          $$ConnectorConfigsTableFilterComposer,
+          $$ConnectorConfigsTableOrderingComposer,
+          $$ConnectorConfigsTableAnnotationComposer,
+          $$ConnectorConfigsTableCreateCompanionBuilder,
+          $$ConnectorConfigsTableUpdateCompanionBuilder,
+          (
+            ConnectorConfig,
+            BaseReferences<
+              _$AppDatabase,
+              $ConnectorConfigsTable,
+              ConnectorConfig
+            >,
+          ),
+          ConnectorConfig,
+          PrefetchHooks Function()
+        > {
+  $$ConnectorConfigsTableTableManager(
+    _$AppDatabase db,
+    $ConnectorConfigsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ConnectorConfigsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ConnectorConfigsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ConnectorConfigsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> connectorType = const Value.absent(),
+                Value<String> displayName = const Value.absent(),
+                Value<String> configJson = const Value.absent(),
+                Value<String?> secretRef = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ConnectorConfigsCompanion(
+                id: id,
+                connectorType: connectorType,
+                displayName: displayName,
+                configJson: configJson,
+                secretRef: secretRef,
+                enabled: enabled,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String connectorType,
+                required String displayName,
+                required String configJson,
+                Value<String?> secretRef = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ConnectorConfigsCompanion.insert(
+                id: id,
+                connectorType: connectorType,
+                displayName: displayName,
+                configJson: configJson,
+                secretRef: secretRef,
+                enabled: enabled,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ConnectorConfigsTable, ConnectorConfig>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ConnectorConfigsTable,
+                    ConnectorConfig
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ConnectorConfigsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ConnectorConfigsTable,
+      ConnectorConfig,
+      $$ConnectorConfigsTableFilterComposer,
+      $$ConnectorConfigsTableOrderingComposer,
+      $$ConnectorConfigsTableAnnotationComposer,
+      $$ConnectorConfigsTableCreateCompanionBuilder,
+      $$ConnectorConfigsTableUpdateCompanionBuilder,
+      (
+        ConnectorConfig,
+        BaseReferences<_$AppDatabase, $ConnectorConfigsTable, ConnectorConfig>,
+      ),
+      ConnectorConfig,
+      PrefetchHooks Function()
+    >;
+typedef $$InboxAuditEventsTableCreateCompanionBuilder =
+    InboxAuditEventsCompanion Function({
+      required String id,
+      Value<String?> itemId,
+      Value<String?> actionId,
+      required String eventType,
+      required DateTime timestamp,
+      required String detailsJson,
+      Value<int> rowid,
+    });
+typedef $$InboxAuditEventsTableUpdateCompanionBuilder =
+    InboxAuditEventsCompanion Function({
+      Value<String> id,
+      Value<String?> itemId,
+      Value<String?> actionId,
+      Value<String> eventType,
+      Value<DateTime> timestamp,
+      Value<String> detailsJson,
+      Value<int> rowid,
+    });
+
+class $$InboxAuditEventsTableFilterComposer
+    extends Composer<_$AppDatabase, $InboxAuditEventsTable> {
+  $$InboxAuditEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get itemId => $composableBuilder(
+    column: $table.itemId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get actionId => $composableBuilder(
+    column: $table.actionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get eventType => $composableBuilder(
+    column: $table.eventType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get timestamp =>
+      $composableBuilder(
+        column: $table.timestamp,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get detailsJson => $composableBuilder(
+    column: $table.detailsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$InboxAuditEventsTableOrderingComposer
+    extends Composer<_$AppDatabase, $InboxAuditEventsTable> {
+  $$InboxAuditEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get itemId => $composableBuilder(
+    column: $table.itemId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get actionId => $composableBuilder(
+    column: $table.actionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get eventType => $composableBuilder(
+    column: $table.eventType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get detailsJson => $composableBuilder(
+    column: $table.detailsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$InboxAuditEventsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InboxAuditEventsTable> {
+  $$InboxAuditEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get itemId =>
+      $composableBuilder(column: $table.itemId, builder: (column) => column);
+
+  GeneratedColumn<String> get actionId =>
+      $composableBuilder(column: $table.actionId, builder: (column) => column);
+
+  GeneratedColumn<String> get eventType =>
+      $composableBuilder(column: $table.eventType, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+
+  GeneratedColumn<String> get detailsJson => $composableBuilder(
+    column: $table.detailsJson,
+    builder: (column) => column,
+  );
+}
+
+class $$InboxAuditEventsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $InboxAuditEventsTable,
+          InboxAuditEvent,
+          $$InboxAuditEventsTableFilterComposer,
+          $$InboxAuditEventsTableOrderingComposer,
+          $$InboxAuditEventsTableAnnotationComposer,
+          $$InboxAuditEventsTableCreateCompanionBuilder,
+          $$InboxAuditEventsTableUpdateCompanionBuilder,
+          (
+            InboxAuditEvent,
+            BaseReferences<
+              _$AppDatabase,
+              $InboxAuditEventsTable,
+              InboxAuditEvent
+            >,
+          ),
+          InboxAuditEvent,
+          PrefetchHooks Function()
+        > {
+  $$InboxAuditEventsTableTableManager(
+    _$AppDatabase db,
+    $InboxAuditEventsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InboxAuditEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InboxAuditEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InboxAuditEventsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String?> itemId = const Value.absent(),
+                Value<String?> actionId = const Value.absent(),
+                Value<String> eventType = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<String> detailsJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InboxAuditEventsCompanion(
+                id: id,
+                itemId: itemId,
+                actionId: actionId,
+                eventType: eventType,
+                timestamp: timestamp,
+                detailsJson: detailsJson,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<String?> itemId = const Value.absent(),
+                Value<String?> actionId = const Value.absent(),
+                required String eventType,
+                required DateTime timestamp,
+                required String detailsJson,
+                Value<int> rowid = const Value.absent(),
+              }) => InboxAuditEventsCompanion.insert(
+                id: id,
+                itemId: itemId,
+                actionId: actionId,
+                eventType: eventType,
+                timestamp: timestamp,
+                detailsJson: detailsJson,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$InboxAuditEventsTable, InboxAuditEvent>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $InboxAuditEventsTable,
+                    InboxAuditEvent
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$InboxAuditEventsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $InboxAuditEventsTable,
+      InboxAuditEvent,
+      $$InboxAuditEventsTableFilterComposer,
+      $$InboxAuditEventsTableOrderingComposer,
+      $$InboxAuditEventsTableAnnotationComposer,
+      $$InboxAuditEventsTableCreateCompanionBuilder,
+      $$InboxAuditEventsTableUpdateCompanionBuilder,
+      (
+        InboxAuditEvent,
+        BaseReferences<_$AppDatabase, $InboxAuditEventsTable, InboxAuditEvent>,
+      ),
+      InboxAuditEvent,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -25041,4 +29899,14 @@ class $AppDatabaseManager {
       $$InboxAttachmentsTableTableManager(_db, _db.inboxAttachments);
   $$ExtractedEventsTableTableManager get extractedEvents =>
       $$ExtractedEventsTableTableManager(_db, _db.extractedEvents);
+  $$InboxActionPlansTableTableManager get inboxActionPlans =>
+      $$InboxActionPlansTableTableManager(_db, _db.inboxActionPlans);
+  $$PlannedActionsTableTableManager get plannedActions =>
+      $$PlannedActionsTableTableManager(_db, _db.plannedActions);
+  $$ExecutionReceiptsTableTableManager get executionReceipts =>
+      $$ExecutionReceiptsTableTableManager(_db, _db.executionReceipts);
+  $$ConnectorConfigsTableTableManager get connectorConfigs =>
+      $$ConnectorConfigsTableTableManager(_db, _db.connectorConfigs);
+  $$InboxAuditEventsTableTableManager get inboxAuditEvents =>
+      $$InboxAuditEventsTableTableManager(_db, _db.inboxAuditEvents);
 }

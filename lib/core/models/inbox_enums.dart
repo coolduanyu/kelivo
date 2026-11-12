@@ -255,3 +255,149 @@ enum InboxRetentionPolicy {
     return null;
   }
 }
+
+/// Lifecycle of a reviewable action plan.
+enum InboxPlanStatus {
+  draft,
+  pendingApproval,
+  approved,
+  rejected,
+  executing,
+  completed,
+  partiallyCompleted,
+  failed;
+
+  String get storageValue => switch (this) {
+    InboxPlanStatus.draft => 'draft',
+    InboxPlanStatus.pendingApproval => 'pending_approval',
+    InboxPlanStatus.approved => 'approved',
+    InboxPlanStatus.rejected => 'rejected',
+    InboxPlanStatus.executing => 'executing',
+    InboxPlanStatus.completed => 'completed',
+    InboxPlanStatus.partiallyCompleted => 'partially_completed',
+    InboxPlanStatus.failed => 'failed',
+  };
+
+  static const storageValues = [
+    'draft',
+    'pending_approval',
+    'approved',
+    'rejected',
+    'executing',
+    'completed',
+    'partially_completed',
+    'failed',
+  ];
+
+  static InboxPlanStatus? tryParse(String? value) {
+    for (final status in InboxPlanStatus.values) {
+      if (status.storageValue == value) return status;
+    }
+    return null;
+  }
+}
+
+/// The write operations an action may request.
+enum InboxOperation {
+  create,
+  update,
+  append,
+  ignore;
+
+  String get storageValue => switch (this) {
+    InboxOperation.create => 'create',
+    InboxOperation.update => 'update',
+    InboxOperation.append => 'append',
+    InboxOperation.ignore => 'ignore',
+  };
+
+  static const storageValues = ['create', 'update', 'append', 'ignore'];
+
+  static InboxOperation? tryParse(String? value) {
+    for (final operation in InboxOperation.values) {
+      if (operation.storageValue == value) return operation;
+    }
+    return null;
+  }
+
+  /// Whether this operation writes to an external system and therefore must be
+  /// approved and recorded in a receipt.
+  bool get writes => this != InboxOperation.ignore;
+}
+
+/// How much care an action needs before it may run.
+enum InboxRiskLevel {
+  normal,
+  elevated,
+  high;
+
+  String get storageValue => switch (this) {
+    InboxRiskLevel.normal => 'normal',
+    InboxRiskLevel.elevated => 'elevated',
+    InboxRiskLevel.high => 'high',
+  };
+
+  static const storageValues = ['normal', 'elevated', 'high'];
+
+  static InboxRiskLevel? tryParse(String? value) {
+    for (final risk in InboxRiskLevel.values) {
+      if (risk.storageValue == value) return risk;
+    }
+    return null;
+  }
+
+  /// High-risk writes are never executed without an explicit human approval,
+  /// regardless of any connector-level "trusted" setting.
+  bool get requiresExplicitApproval => this == InboxRiskLevel.high;
+}
+
+/// Per-action human approval state.
+enum InboxApprovalState {
+  pending,
+  approved,
+  rejected;
+
+  String get storageValue => switch (this) {
+    InboxApprovalState.pending => 'pending',
+    InboxApprovalState.approved => 'approved',
+    InboxApprovalState.rejected => 'rejected',
+  };
+
+  static const storageValues = ['pending', 'approved', 'rejected'];
+
+  static InboxApprovalState? tryParse(String? value) {
+    for (final state in InboxApprovalState.values) {
+      if (state.storageValue == value) return state;
+    }
+    return null;
+  }
+}
+
+/// What actually happened when an action was sent to a connector.
+///
+/// Only [succeeded] may be presented as a completed write. Everything else must
+/// surface as a failure or an unknown result the user has to check.
+enum InboxExecutionOutcome {
+  succeeded,
+  failed,
+  timedOut,
+  rejected;
+
+  String get storageValue => switch (this) {
+    InboxExecutionOutcome.succeeded => 'succeeded',
+    InboxExecutionOutcome.failed => 'failed',
+    InboxExecutionOutcome.timedOut => 'timed_out',
+    InboxExecutionOutcome.rejected => 'rejected',
+  };
+
+  static const storageValues = ['succeeded', 'failed', 'timed_out', 'rejected'];
+
+  static InboxExecutionOutcome? tryParse(String? value) {
+    for (final outcome in InboxExecutionOutcome.values) {
+      if (outcome.storageValue == value) return outcome;
+    }
+    return null;
+  }
+
+  bool get isWriteConfirmed => this == InboxExecutionOutcome.succeeded;
+}
