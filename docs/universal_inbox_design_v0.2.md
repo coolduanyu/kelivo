@@ -1,7 +1,7 @@
 # Kelivo Universal Inbox 需求与技术设计 v0.2（源码落地版）
 
 > 版本：v0.2（2026-11-12）  
-> 状态：**阶段 0 审计完成；阶段 1 已实现两个纵向切片——(a) Drift v6 采集/事件 Schema + 状态机 + 持久化，(b) Drift v7 计划/执行/回执/审计 + Connector 契约 + 内置演示 Connector 的执行闭环；`dart analyze` 与 `flutter test` 通过。尚未做设备验证；捕获入口接线、模型抽取、真实连接器与 UI 未实现。**  
+> 状态：**阶段 0 审计完成；阶段 1 已实现三个纵向切片——(a) Drift v6 采集/事件 Schema + 状态机 + 持久化，(b) Drift v7 计划/执行/回执/审计 + Connector 契约 + 内置演示 Connector 的执行闭环，(c) Google 日历真实连接器；`dart analyze` 与 `flutter test` 通过。尚未做设备验证；捕获入口接线、模型抽取、任务类连接器与 UI 未实现。**  
 > 基线：[universal_inbox_design_v0.1.md](universal_inbox_design_v0.1.md)（产品定位、用户旅程、UX 意图、测试用例仍以 v0.1 为准，本文件不重复）  
 > 依据：[universal_inbox_phase0_gap_analysis.md](universal_inbox_phase0_gap_analysis.md)（差距表、真实路径、核验方法）  
 > 审计锁定 commit：`27b8da938cfa7297323bc4267fbf52648ffda894`（Chevey339/kelivo `master`）
@@ -138,9 +138,25 @@ v0.1 的 10 张表（`inbox_items` / `inbox_attachments` / `extracted_events` / 
 
 **仍未实现**：捕获入口接线、模型事件抽取、实体解析、ActionPlan 生成与字段级 diff 预览 UI、真实（非演示）连接器、chat-independent 审批 UI。
 
+### 阶段 1（进行中）——第三个纵向切片：Google 日历连接器（真实可写）
+
+按需求方指示「从谷歌日历开始，可借鉴开源社区方案」，已实现**第一个真实（非演示）连接器**：
+
+- **复用而非新增依赖**：直接调用 Calendar REST API，使用仓库已依赖的 `http`（1.6.0）；不引入 Google SDK，**未新增任何包**。
+- **不重写 OAuth**：通过 `GoogleAccessTokenProvider` 回调获取 access token，PKCE/刷新仍由既有 `lib/core/services/auth/` 负责；本类不存储、不记录凭证。
+- **契约一致**：仅声明 `meeting` 实体与 `create`/`update`；只有 Google 返回事件 `id` 才算确认；2xx 但无 ID 视为未确认。
+- **幂等**：把 action 的 `idempotencyKey` 写入 `extendedProperties.private`，创建前先按该键检索，因此**重试命中既有事件而不重复创建**；调用方自带的 `extendedProperties` 会保留。
+- **时区**：原样透传调用方给出的时区偏移（如 `+04:00`），不擅自换算。
+- **诚实失败**：401/403 作为「需重新授权」单独上报；非对象字段在**不触网**的情况下拒绝。
+- **验证**：`flutter test test/core/services/inbox/ test/core/database/` 835 项全通过，其中新增 14 项日历连接器用例（注入 MockClient，无需网络与真实账号）；`dart analyze --fatal-infos` 无问题；格式检查无差异。
+
+开源社区可借鉴的实现（已评估，未直接引入以保持零新依赖）：[nspady/google-calendar-mcp](https://github.com/nspady/google-calendar-mcp)、[appler1009/google-calendar-mcp-lib](https://github.com/appler1009/google-calendar-mcp-lib)、[PabloSR06/mcp-google-calendar](https://github.com/PabloSR06/mcp-google-calendar)。它们的 token/事件映射思路与本文一致；若后续希望改走 MCP，可在现有 `connector_registry` 下加一个 MCP 传输适配器，而不改动执行引擎。
+
+**第二个真实连接器（任务工具）仍待需求方指定**。
+
 ### 阶段 2～3 的开工门槛（未满足，需需求方/环境提供）
 
-1. ~~工具链~~ **已满足**：已安装 Flutter 3.47.6 / Dart 3.13.5（与 `pr-check.yml` 一致），`flutter pub get --enforce-lockfile` 通过，`dart analyze` / `flutter test` / `build_runner` / `drift_dev` 均可运行。UIKit 类 **UI 改动** 的 Before/After 截图仍需可运行桌面/移动构建环境（本机缺 `ninja`/`libgtk-3-dev`，未验证桌面构建）。
+1. **工具链**：Flutter 3.47.6 / Dart 3.13.5 已就绪（与 `pr-check.yml` 一致），`dart analyze` / `flutter test` / `build_runner` / `drift_dev` 可运行。但**桌面构建所需的 `ninja-build` 与 `libgtk-3-dev` 尚未安装**：账号 `coolduanyu` 属于 sudo 组且具 `(ALL : ALL) ALL`，但本会话无 tty，`sudo` 要求交互密码而无法自动提权。需人工执行：`sudo apt-get update && sudo apt-get install -y ninja-build libgtk-3-dev`，之后 UI 改动的 Before/After 截图才可产出。
 2. **§10 未决项（需产品/运行决策，本版不代拍）**：
    - 首批两个真正可写连接器的实际选择与 API 限额（v0.1 §2 P0、§10）——源码无法回答，真实 MCP 无 CRUD 契约；
    - 跨设备对同一外部对象的幂等键协调机制（需运行/设备测试确定外部 API 幂等语义）；
