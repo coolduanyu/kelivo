@@ -1,7 +1,7 @@
 # Kelivo Universal Inbox 需求与技术设计 v0.2（源码落地版）
 
 > 版本：v0.2（2026-11-12）  
-> 状态：**阶段 0 源码审计完成并已修正 v0.1 技术假设；阶段 1 第一个纵向切片（Drift v6 数据迁移 + 事件 Schema + 状态机 + 持久化）已实现，`dart analyze` 与 `flutter test` 通过；尚未做设备验证，UI/Connector/执行闭环未实现。**  
+> 状态：**阶段 0 审计完成；阶段 1 已实现两个纵向切片——(a) Drift v6 采集/事件 Schema + 状态机 + 持久化，(b) Drift v7 计划/执行/回执/审计 + Connector 契约 + 内置演示 Connector 的执行闭环；`dart analyze` 与 `flutter test` 通过。尚未做设备验证；捕获入口接线、模型抽取、真实连接器与 UI 未实现。**  
 > 基线：[universal_inbox_design_v0.1.md](universal_inbox_design_v0.1.md)（产品定位、用户旅程、UX 意图、测试用例仍以 v0.1 为准，本文件不重复）  
 > 依据：[universal_inbox_phase0_gap_analysis.md](universal_inbox_phase0_gap_analysis.md)（差距表、真实路径、核验方法）  
 > 审计锁定 commit：`27b8da938cfa7297323bc4267fbf52648ffda894`（Chevey339/kelivo `master`）
@@ -125,6 +125,18 @@ v0.1 的 10 张表（`inbox_items` / `inbox_attachments` / `extracted_events` / 
 - **验证**：`dart analyze --fatal-infos lib test integration_test tool` 无问题；`flutter test test/core/database/` 787 项全通过（含新增 `inbox_store_test.dart` 10 项，覆盖去重、状态机非法转移、事件替换）；`dart format` 按 CI 方式校验 14 个改动文件无差异。
 
 **尚未实现**：捕获入口接线（Android/Windows 汇入 Inbox）、模型抽取、实体解析、ActionPlan/预览 UI、Connector 与执行闭环、chat-independent 审批；这些依赖后面的 §10 决策与后续小步。
+
+### 阶段 1（进行中）——第二个纵向切片：执行闭环（内置演示 Connector）
+
+设计 §2 P0 明确允许「第三个可使用内置演示 Connector 验证 CRM 字段变更」，因此执行闭环无需等待外部连接器选型即可实现并验证：
+
+- **Drift v6 → v7**（纯增量）：`inbox_action_plans`、`planned_actions`、`execution_receipts`、`connector_configs`、`inbox_audit_events` 及索引；`currentSchemaVersion = 7`、`publishedSchemaVersions = {1,2,3,5,6,7}`。
+- **Connector 契约**（`lib/core/services/inbox/connector.dart`）：`ConnectorManifest` 显式声明 `canSearch`/`canGet`（缺失时按 v0.1 §4.2 降级并提示重复创建风险）；`ConnectorWriteResult` 只有在**返回真实外部 ID** 时才算确认；无默认目的地回退。
+- **内置演示 Connector**（`demo_connector.dart`）：按 `idempotencyKey` 去重、拒绝不支持的实体/操作、可注入失败或省略 ID，用于证明诚实失败路径。
+- **执行引擎**（`inbox_execution_engine.dart`）：只执行已批准动作；已有确认回执时直接短路，**重试不会重复写入**；失败/超时一律记为失败而非成功；连接器不可用时失败而非改投他处；每次尝试写回执 + 审计行。
+- **验证**：`flutter test test/core/database/ test/core/services/inbox/` 821 项全通过，其中新增 11 项执行引擎用例（未批准不写、单次写入+回执、重试不重复、幂等键稳定、失败/超时回执、成功但无 ID 视为未确认、连接器不可用不改投、ignore 不写、部分成功如实返回）。`dart analyze --fatal-infos` 无问题，`dart format` 按 CI 方式无差异。
+
+**仍未实现**：捕获入口接线、模型事件抽取、实体解析、ActionPlan 生成与字段级 diff 预览 UI、真实（非演示）连接器、chat-independent 审批 UI。
 
 ### 阶段 2～3 的开工门槛（未满足，需需求方/环境提供）
 
