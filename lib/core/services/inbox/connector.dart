@@ -140,3 +140,17 @@ abstract class ConnectorAccess {
   /// Re-reads what was written so the caller can confirm the remote state.
   Future<ConnectorRecord?> verify(String externalId);
 }
+
+/// A transport-level failure from the calendar API.
+class ConnectorHttpException implements Exception {
+  const ConnectorHttpException({
+    required this.statusCode,
+    required this.message,
+  });
+
+  final int statusCode;
+  final String message;
+
+  @override
+  String toString() => 'ConnectorHttpException($statusCode, $message)';
+}

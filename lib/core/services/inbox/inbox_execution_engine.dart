@@ -336,6 +336,19 @@ class InboxExecutionEngine {
         message: 'connector timed out',
         fingerprint: row.idempotencyKey,
       );
+    } on ConnectorHttpException catch (error) {
+      // 401/403 means the destination needs re-authorization; say so instead of
+      // burying it in a generic transport error.
+      final needsAuth = error.statusCode == 401 || error.statusCode == 403;
+      return _recordFailure(
+        actionId: actionId,
+        connectorId: row.connectorId,
+        outcome: InboxExecutionOutcome.failed,
+        message: needsAuth
+            ? 'connector authorization required (${error.statusCode})'
+            : 'connector transport error (${error.statusCode})',
+        fingerprint: row.idempotencyKey,
+      );
     } catch (error) {
       return _recordFailure(
         actionId: actionId,
