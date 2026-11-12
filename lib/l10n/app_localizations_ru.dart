@@ -17110,4 +17110,101 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get responseRetryWithoutImages =>
       'Повторить без изображений (сохранить оригиналы)';
+
+  @override
+  String get inboxTitle => 'Inbox';
+
+  @override
+  String get inboxEmpty => 'Nothing captured yet';
+
+  @override
+  String get inboxSelectItem => 'Select an item to review';
+
+  @override
+  String get inboxDropHint => 'Paste a screenshot or text, or drop files here';
+
+  @override
+  String get inboxPaste => 'Paste';
+
+  @override
+  String get inboxPickFile => 'Choose file';
+
+  @override
+  String get inboxUntitled => 'Untitled item';
+
+  @override
+  String get inboxEventCountOne => '1 event';
+
+  @override
+  String inboxEventCountMany(int count) {
+    return '$count events';
+  }
+
+  @override
+  String inboxAttachmentOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attachments',
+      one: '1 attachment',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inboxSourceSection => 'Captured content';
+
+  @override
+  String get inboxProposalsSection => 'Proposed changes';
+
+  @override
+  String get inboxNoProposals => 'No proposals yet';
+
+  @override
+  String get inboxStatusReceived => 'Received';
+
+  @override
+  String get inboxStatusAnalyzing => 'Analyzing';
+
+  @override
+  String get inboxStatusNeedsReview => 'Needs review';
+
+  @override
+  String get inboxStatusExecuting => 'Executing';
+
+  @override
+  String get inboxStatusExecuted => 'Executed';
+
+  @override
+  String get inboxStatusPartialFailure => 'Partly failed';
+
+  @override
+  String get inboxStatusFailed => 'Failed';
+
+  @override
+  String get inboxApprovalPending => 'Pending';
+
+  @override
+  String get inboxApprovalApproved => 'Approved';
+
+  @override
+  String get inboxApprovalRejected => 'Rejected';
+
+  @override
+  String get inboxApprove => 'Approve';
+
+  @override
+  String get inboxReject => 'Reject';
+
+  @override
+  String get inboxActionExecuted => 'Written to target';
+
+  @override
+  String get inboxDiffBefore => 'Before';
+
+  @override
+  String get inboxDiffAfter => 'After';
+
+  @override
+  String get inboxDiffEmpty => '—';
 }
