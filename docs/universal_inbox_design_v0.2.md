@@ -1,7 +1,7 @@
 # Kelivo Universal Inbox 需求与技术设计 v0.2（源码落地版）
 
 > 版本：v0.2（2026-11-12）  
-> 状态：**阶段 0 源码审计完成；已按审计结果修正 v0.1 的技术假设；仍未编译、未做设备验证，未进入编码。**  
+> 状态：**阶段 0 源码审计完成并已修正 v0.1 技术假设；阶段 1 第一个纵向切片（Drift v6 数据迁移 + 事件 Schema + 状态机 + 持久化）已实现，`dart analyze` 与 `flutter test` 通过；尚未做设备验证，UI/Connector/执行闭环未实现。**  
 > 基线：[universal_inbox_design_v0.1.md](universal_inbox_design_v0.1.md)（产品定位、用户旅程、UX 意图、测试用例仍以 v0.1 为准，本文件不重复）  
 > 依据：[universal_inbox_phase0_gap_analysis.md](universal_inbox_phase0_gap_analysis.md)（差距表、真实路径、核验方法）  
 > 审计锁定 commit：`27b8da938cfa7297323bc4267fbf52648ffda894`（Chevey339/kelivo `master`）
@@ -114,9 +114,21 @@ v0.1 的 10 张表（`inbox_items` / `inbox_attachments` / `extracted_events` / 
 - 按结果修正本设计 → 本文件 v0.2。
 - **结论：不进入编码**（v0.1 §8「不通过则更新本设计而不是硬写代码」）。
 
-### 阶段 1～3 的开工门槛（未满足，需需求方/环境提供）
+### 阶段 1（进行中）——已完成第一个纵向切片：数据迁移 + 事件 Schema
 
-1. **工具链**：安装 Flutter 3.47.6（与 `pr-check.yml` 一致）+ Dart SDK，`flutter pub get --enforce-lockfile`；否则无法 `dart analyze` / `flutter test` / `build_runner` / `gen-l10n` / `flutter build`，也无法产出 UI 改动所需的 Before/After 视觉证据。
+按 v0.1 §9.5「小步提交：数据迁移 → 事件 Schema → Provider 桥接 → Inbox UI → Connector → 执行闭环」的前两步已实现并通过检查：
+
+- **Drift 迁移 v5 → v6**（纯增量）：`inbox_items`、`inbox_attachments`、`extracted_events` 三表及其索引；`currentSchemaVersion = 6`、`publishedSchemaVersions = {1,2,3,5,6}`；`from5To6` 在 `stepByStep` 中显式建表并建索引（`stepByStep` 不自动建索引）。按 `schema_migrations.dart:28-50` 流程产出 `drift_schemas/app_database/drift_schema_v6.json`、`test/core/database/generated_schema/schema_v6.dart`、重新生成 `schema_versions.dart` 与 `app_database.g.dart`，并同步 `ChatDatabaseRepository.currentSchemaColumns` / 必建表清单。
+- **事件 Schema（真实类型）**：`lib/core/models/inbox_enums.dart`（`InboxSourceType` / `InboxItemStatus` / `InboxEntityType` / `InboxCertainty` / `InboxRetentionPolicy`，字符串值单一来源、同时供 Drift `CHECK` 约束与 Dart 解析）；`lib/core/models/inbox_item.dart`（`InboxCapture` / `InboxCaptureAttachment` / `InboxExtractedEvent` 值对象）。
+- **状态机**：`InboxItemStatus.allowedNext` 编码设计文档的 `received -> … -> succeeded/partial_failed/failed`；非法转移抛 `inbox_item_illegal_transition`，因此被拒绝/失败的项永不可能被展示为「已写入」。
+- **持久化**：`lib/core/database/inbox_store.dart` —— `capture` 在同一写事务内按 `(sourceType, contentHash)` 去重（重复导入返回 `InboxCaptureDuplicate`，不新建行），`transition` 校验合法性，`replaceExtractedEvents` 原子替换。
+- **验证**：`dart analyze --fatal-infos lib test integration_test tool` 无问题；`flutter test test/core/database/` 787 项全通过（含新增 `inbox_store_test.dart` 10 项，覆盖去重、状态机非法转移、事件替换）；`dart format` 按 CI 方式校验 14 个改动文件无差异。
+
+**尚未实现**：捕获入口接线（Android/Windows 汇入 Inbox）、模型抽取、实体解析、ActionPlan/预览 UI、Connector 与执行闭环、chat-independent 审批；这些依赖后面的 §10 决策与后续小步。
+
+### 阶段 2～3 的开工门槛（未满足，需需求方/环境提供）
+
+1. ~~工具链~~ **已满足**：已安装 Flutter 3.47.6 / Dart 3.13.5（与 `pr-check.yml` 一致），`flutter pub get --enforce-lockfile` 通过，`dart analyze` / `flutter test` / `build_runner` / `drift_dev` 均可运行。UIKit 类 **UI 改动** 的 Before/After 截图仍需可运行桌面/移动构建环境（本机缺 `ninja`/`libgtk-3-dev`，未验证桌面构建）。
 2. **§10 未决项（需产品/运行决策，本版不代拍）**：
    - 首批两个真正可写连接器的实际选择与 API 限额（v0.1 §2 P0、§10）——源码无法回答，真实 MCP 无 CRUD 契约；
    - 跨设备对同一外部对象的幂等键协调机制（需运行/设备测试确定外部 API 幂等语义）；

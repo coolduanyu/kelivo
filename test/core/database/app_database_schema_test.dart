@@ -125,6 +125,9 @@ void main() {
             'asset_gc_rows',
             'gc_audit_rows',
             'asset_reference_dirty_rows',
+            'inbox_items',
+            'inbox_attachments',
+            'extracted_events',
           }),
         );
       } finally {

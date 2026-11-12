@@ -12757,6 +12757,1627 @@ class ExtensionEntityRowsCompanion extends UpdateCompanion<ExtensionEntityRow> {
   }
 }
 
+class $InboxItemsTable extends InboxItems
+    with TableInfo<$InboxItemsTable, InboxItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InboxItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceTypeMeta = const VerificationMeta(
+    'sourceType',
+  );
+  @override
+  late final GeneratedColumn<String> sourceType = GeneratedColumn<String>(
+    'source_type',
+    aliasedName,
+    false,
+    check: () => sourceType.isIn(InboxSourceType.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _rawTextMeta = const VerificationMeta(
+    'rawText',
+  );
+  @override
+  late final GeneratedColumn<String> rawText = GeneratedColumn<String>(
+    'raw_text',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentHashMeta = const VerificationMeta(
+    'contentHash',
+  );
+  @override
+  late final GeneratedColumn<String> contentHash = GeneratedColumn<String>(
+    'content_hash',
+    aliasedName,
+    false,
+    check: () => contentHash.isNotValue(''),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    check: () => status.isIn(InboxItemStatus.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('received'),
+  );
+  static const VerificationMeta _sourceAppMeta = const VerificationMeta(
+    'sourceApp',
+  );
+  @override
+  late final GeneratedColumn<String> sourceApp = GeneratedColumn<String>(
+    'source_app',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> capturedAt =
+      GeneratedColumn<int>(
+        'captured_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxItemsTable.$convertercapturedAt);
+  static const VerificationMeta _timezoneMeta = const VerificationMeta(
+    'timezone',
+  );
+  @override
+  late final GeneratedColumn<String> timezone = GeneratedColumn<String>(
+    'timezone',
+    aliasedName,
+    false,
+    check: () => timezone.isNotValue(''),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> updatedAt =
+      GeneratedColumn<int>(
+        'updated_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxItemsTable.$converterupdatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    sourceType,
+    rawText,
+    contentHash,
+    status,
+    sourceApp,
+    capturedAt,
+    timezone,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'inbox_items';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InboxItem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('source_type')) {
+      context.handle(
+        _sourceTypeMeta,
+        sourceType.isAcceptableOrUnknown(data['source_type']!, _sourceTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceTypeMeta);
+    }
+    if (data.containsKey('raw_text')) {
+      context.handle(
+        _rawTextMeta,
+        rawText.isAcceptableOrUnknown(data['raw_text']!, _rawTextMeta),
+      );
+    }
+    if (data.containsKey('content_hash')) {
+      context.handle(
+        _contentHashMeta,
+        contentHash.isAcceptableOrUnknown(
+          data['content_hash']!,
+          _contentHashMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_contentHashMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('source_app')) {
+      context.handle(
+        _sourceAppMeta,
+        sourceApp.isAcceptableOrUnknown(data['source_app']!, _sourceAppMeta),
+      );
+    }
+    if (data.containsKey('timezone')) {
+      context.handle(
+        _timezoneMeta,
+        timezone.isAcceptableOrUnknown(data['timezone']!, _timezoneMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timezoneMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InboxItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InboxItem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      sourceType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_type'],
+      )!,
+      rawText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}raw_text'],
+      ),
+      contentHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_hash'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      sourceApp: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_app'],
+      ),
+      capturedAt: $InboxItemsTable.$convertercapturedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}captured_at'],
+        )!,
+      ),
+      timezone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}timezone'],
+      )!,
+      updatedAt: $InboxItemsTable.$converterupdatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}updated_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $InboxItemsTable createAlias(String alias) {
+    return $InboxItemsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertercapturedAt =
+      const MicrosecondDateTimeConverter();
+  static TypeConverter<DateTime, int> $converterupdatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class InboxItem extends DataClass implements Insertable<InboxItem> {
+  final String id;
+  final String sourceType;
+  final String? rawText;
+  final String contentHash;
+  final String status;
+  final String? sourceApp;
+  final DateTime capturedAt;
+  final String timezone;
+  final DateTime updatedAt;
+  const InboxItem({
+    required this.id,
+    required this.sourceType,
+    this.rawText,
+    required this.contentHash,
+    required this.status,
+    this.sourceApp,
+    required this.capturedAt,
+    required this.timezone,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['source_type'] = Variable<String>(sourceType);
+    if (!nullToAbsent || rawText != null) {
+      map['raw_text'] = Variable<String>(rawText);
+    }
+    map['content_hash'] = Variable<String>(contentHash);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || sourceApp != null) {
+      map['source_app'] = Variable<String>(sourceApp);
+    }
+    {
+      map['captured_at'] = Variable<int>(
+        $InboxItemsTable.$convertercapturedAt.toSql(capturedAt),
+      );
+    }
+    map['timezone'] = Variable<String>(timezone);
+    {
+      map['updated_at'] = Variable<int>(
+        $InboxItemsTable.$converterupdatedAt.toSql(updatedAt),
+      );
+    }
+    return map;
+  }
+
+  InboxItemsCompanion toCompanion(bool nullToAbsent) {
+    return InboxItemsCompanion(
+      id: Value(id),
+      sourceType: Value(sourceType),
+      rawText: rawText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rawText),
+      contentHash: Value(contentHash),
+      status: Value(status),
+      sourceApp: sourceApp == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceApp),
+      capturedAt: Value(capturedAt),
+      timezone: Value(timezone),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory InboxItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InboxItem(
+      id: serializer.fromJson<String>(json['id']),
+      sourceType: serializer.fromJson<String>(json['sourceType']),
+      rawText: serializer.fromJson<String?>(json['rawText']),
+      contentHash: serializer.fromJson<String>(json['contentHash']),
+      status: serializer.fromJson<String>(json['status']),
+      sourceApp: serializer.fromJson<String?>(json['sourceApp']),
+      capturedAt: serializer.fromJson<DateTime>(json['capturedAt']),
+      timezone: serializer.fromJson<String>(json['timezone']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'sourceType': serializer.toJson<String>(sourceType),
+      'rawText': serializer.toJson<String?>(rawText),
+      'contentHash': serializer.toJson<String>(contentHash),
+      'status': serializer.toJson<String>(status),
+      'sourceApp': serializer.toJson<String?>(sourceApp),
+      'capturedAt': serializer.toJson<DateTime>(capturedAt),
+      'timezone': serializer.toJson<String>(timezone),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  InboxItem copyWith({
+    String? id,
+    String? sourceType,
+    Value<String?> rawText = const Value.absent(),
+    String? contentHash,
+    String? status,
+    Value<String?> sourceApp = const Value.absent(),
+    DateTime? capturedAt,
+    String? timezone,
+    DateTime? updatedAt,
+  }) => InboxItem(
+    id: id ?? this.id,
+    sourceType: sourceType ?? this.sourceType,
+    rawText: rawText.present ? rawText.value : this.rawText,
+    contentHash: contentHash ?? this.contentHash,
+    status: status ?? this.status,
+    sourceApp: sourceApp.present ? sourceApp.value : this.sourceApp,
+    capturedAt: capturedAt ?? this.capturedAt,
+    timezone: timezone ?? this.timezone,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  InboxItem copyWithCompanion(InboxItemsCompanion data) {
+    return InboxItem(
+      id: data.id.present ? data.id.value : this.id,
+      sourceType: data.sourceType.present
+          ? data.sourceType.value
+          : this.sourceType,
+      rawText: data.rawText.present ? data.rawText.value : this.rawText,
+      contentHash: data.contentHash.present
+          ? data.contentHash.value
+          : this.contentHash,
+      status: data.status.present ? data.status.value : this.status,
+      sourceApp: data.sourceApp.present ? data.sourceApp.value : this.sourceApp,
+      capturedAt: data.capturedAt.present
+          ? data.capturedAt.value
+          : this.capturedAt,
+      timezone: data.timezone.present ? data.timezone.value : this.timezone,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxItem(')
+          ..write('id: $id, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('rawText: $rawText, ')
+          ..write('contentHash: $contentHash, ')
+          ..write('status: $status, ')
+          ..write('sourceApp: $sourceApp, ')
+          ..write('capturedAt: $capturedAt, ')
+          ..write('timezone: $timezone, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    sourceType,
+    rawText,
+    contentHash,
+    status,
+    sourceApp,
+    capturedAt,
+    timezone,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InboxItem &&
+          other.id == this.id &&
+          other.sourceType == this.sourceType &&
+          other.rawText == this.rawText &&
+          other.contentHash == this.contentHash &&
+          other.status == this.status &&
+          other.sourceApp == this.sourceApp &&
+          other.capturedAt == this.capturedAt &&
+          other.timezone == this.timezone &&
+          other.updatedAt == this.updatedAt);
+}
+
+class InboxItemsCompanion extends UpdateCompanion<InboxItem> {
+  final Value<String> id;
+  final Value<String> sourceType;
+  final Value<String?> rawText;
+  final Value<String> contentHash;
+  final Value<String> status;
+  final Value<String?> sourceApp;
+  final Value<DateTime> capturedAt;
+  final Value<String> timezone;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const InboxItemsCompanion({
+    this.id = const Value.absent(),
+    this.sourceType = const Value.absent(),
+    this.rawText = const Value.absent(),
+    this.contentHash = const Value.absent(),
+    this.status = const Value.absent(),
+    this.sourceApp = const Value.absent(),
+    this.capturedAt = const Value.absent(),
+    this.timezone = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InboxItemsCompanion.insert({
+    required String id,
+    required String sourceType,
+    this.rawText = const Value.absent(),
+    required String contentHash,
+    this.status = const Value.absent(),
+    this.sourceApp = const Value.absent(),
+    required DateTime capturedAt,
+    required String timezone,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       sourceType = Value(sourceType),
+       contentHash = Value(contentHash),
+       capturedAt = Value(capturedAt),
+       timezone = Value(timezone),
+       updatedAt = Value(updatedAt);
+  static Insertable<InboxItem> custom({
+    Expression<String>? id,
+    Expression<String>? sourceType,
+    Expression<String>? rawText,
+    Expression<String>? contentHash,
+    Expression<String>? status,
+    Expression<String>? sourceApp,
+    Expression<int>? capturedAt,
+    Expression<String>? timezone,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sourceType != null) 'source_type': sourceType,
+      if (rawText != null) 'raw_text': rawText,
+      if (contentHash != null) 'content_hash': contentHash,
+      if (status != null) 'status': status,
+      if (sourceApp != null) 'source_app': sourceApp,
+      if (capturedAt != null) 'captured_at': capturedAt,
+      if (timezone != null) 'timezone': timezone,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InboxItemsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? sourceType,
+    Value<String?>? rawText,
+    Value<String>? contentHash,
+    Value<String>? status,
+    Value<String?>? sourceApp,
+    Value<DateTime>? capturedAt,
+    Value<String>? timezone,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return InboxItemsCompanion(
+      id: id ?? this.id,
+      sourceType: sourceType ?? this.sourceType,
+      rawText: rawText ?? this.rawText,
+      contentHash: contentHash ?? this.contentHash,
+      status: status ?? this.status,
+      sourceApp: sourceApp ?? this.sourceApp,
+      capturedAt: capturedAt ?? this.capturedAt,
+      timezone: timezone ?? this.timezone,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (sourceType.present) {
+      map['source_type'] = Variable<String>(sourceType.value);
+    }
+    if (rawText.present) {
+      map['raw_text'] = Variable<String>(rawText.value);
+    }
+    if (contentHash.present) {
+      map['content_hash'] = Variable<String>(contentHash.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (sourceApp.present) {
+      map['source_app'] = Variable<String>(sourceApp.value);
+    }
+    if (capturedAt.present) {
+      map['captured_at'] = Variable<int>(
+        $InboxItemsTable.$convertercapturedAt.toSql(capturedAt.value),
+      );
+    }
+    if (timezone.present) {
+      map['timezone'] = Variable<String>(timezone.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(
+        $InboxItemsTable.$converterupdatedAt.toSql(updatedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxItemsCompanion(')
+          ..write('id: $id, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('rawText: $rawText, ')
+          ..write('contentHash: $contentHash, ')
+          ..write('status: $status, ')
+          ..write('sourceApp: $sourceApp, ')
+          ..write('capturedAt: $capturedAt, ')
+          ..write('timezone: $timezone, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $InboxAttachmentsTable extends InboxAttachments
+    with TableInfo<$InboxAttachmentsTable, InboxAttachment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InboxAttachmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
+    'item_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES inbox_items (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _localPathMeta = const VerificationMeta(
+    'localPath',
+  );
+  @override
+  late final GeneratedColumn<String> localPath = GeneratedColumn<String>(
+    'local_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _mimeMeta = const VerificationMeta('mime');
+  @override
+  late final GeneratedColumn<String> mime = GeneratedColumn<String>(
+    'mime',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sizeBytesMeta = const VerificationMeta(
+    'sizeBytes',
+  );
+  @override
+  late final GeneratedColumn<int> sizeBytes = GeneratedColumn<int>(
+    'size_bytes',
+    aliasedName,
+    false,
+    check: () => ComparableExpr(sizeBytes).isBiggerOrEqualValue(0),
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sha256Meta = const VerificationMeta('sha256');
+  @override
+  late final GeneratedColumn<String> sha256 = GeneratedColumn<String>(
+    'sha256',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _retentionPolicyMeta = const VerificationMeta(
+    'retentionPolicy',
+  );
+  @override
+  late final GeneratedColumn<String> retentionPolicy = GeneratedColumn<String>(
+    'retention_policy',
+    aliasedName,
+    false,
+    check: () => retentionPolicy.isIn(InboxRetentionPolicy.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('keep'),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> createdAt =
+      GeneratedColumn<int>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($InboxAttachmentsTable.$convertercreatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    itemId,
+    localPath,
+    mime,
+    sizeBytes,
+    sha256,
+    retentionPolicy,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'inbox_attachments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InboxAttachment> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(
+        _itemIdMeta,
+        itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('local_path')) {
+      context.handle(
+        _localPathMeta,
+        localPath.isAcceptableOrUnknown(data['local_path']!, _localPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_localPathMeta);
+    }
+    if (data.containsKey('mime')) {
+      context.handle(
+        _mimeMeta,
+        mime.isAcceptableOrUnknown(data['mime']!, _mimeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mimeMeta);
+    }
+    if (data.containsKey('size_bytes')) {
+      context.handle(
+        _sizeBytesMeta,
+        sizeBytes.isAcceptableOrUnknown(data['size_bytes']!, _sizeBytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sizeBytesMeta);
+    }
+    if (data.containsKey('sha256')) {
+      context.handle(
+        _sha256Meta,
+        sha256.isAcceptableOrUnknown(data['sha256']!, _sha256Meta),
+      );
+    } else if (isInserting) {
+      context.missing(_sha256Meta);
+    }
+    if (data.containsKey('retention_policy')) {
+      context.handle(
+        _retentionPolicyMeta,
+        retentionPolicy.isAcceptableOrUnknown(
+          data['retention_policy']!,
+          _retentionPolicyMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InboxAttachment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InboxAttachment(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      )!,
+      localPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_path'],
+      )!,
+      mime: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mime'],
+      )!,
+      sizeBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}size_bytes'],
+      )!,
+      sha256: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sha256'],
+      )!,
+      retentionPolicy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}retention_policy'],
+      )!,
+      createdAt: $InboxAttachmentsTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $InboxAttachmentsTable createAlias(String alias) {
+    return $InboxAttachmentsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertercreatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class InboxAttachment extends DataClass implements Insertable<InboxAttachment> {
+  final String id;
+  final String itemId;
+  final String localPath;
+  final String mime;
+  final int sizeBytes;
+  final String sha256;
+  final String retentionPolicy;
+  final DateTime createdAt;
+  const InboxAttachment({
+    required this.id,
+    required this.itemId,
+    required this.localPath,
+    required this.mime,
+    required this.sizeBytes,
+    required this.sha256,
+    required this.retentionPolicy,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['item_id'] = Variable<String>(itemId);
+    map['local_path'] = Variable<String>(localPath);
+    map['mime'] = Variable<String>(mime);
+    map['size_bytes'] = Variable<int>(sizeBytes);
+    map['sha256'] = Variable<String>(sha256);
+    map['retention_policy'] = Variable<String>(retentionPolicy);
+    {
+      map['created_at'] = Variable<int>(
+        $InboxAttachmentsTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    return map;
+  }
+
+  InboxAttachmentsCompanion toCompanion(bool nullToAbsent) {
+    return InboxAttachmentsCompanion(
+      id: Value(id),
+      itemId: Value(itemId),
+      localPath: Value(localPath),
+      mime: Value(mime),
+      sizeBytes: Value(sizeBytes),
+      sha256: Value(sha256),
+      retentionPolicy: Value(retentionPolicy),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory InboxAttachment.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InboxAttachment(
+      id: serializer.fromJson<String>(json['id']),
+      itemId: serializer.fromJson<String>(json['itemId']),
+      localPath: serializer.fromJson<String>(json['localPath']),
+      mime: serializer.fromJson<String>(json['mime']),
+      sizeBytes: serializer.fromJson<int>(json['sizeBytes']),
+      sha256: serializer.fromJson<String>(json['sha256']),
+      retentionPolicy: serializer.fromJson<String>(json['retentionPolicy']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'itemId': serializer.toJson<String>(itemId),
+      'localPath': serializer.toJson<String>(localPath),
+      'mime': serializer.toJson<String>(mime),
+      'sizeBytes': serializer.toJson<int>(sizeBytes),
+      'sha256': serializer.toJson<String>(sha256),
+      'retentionPolicy': serializer.toJson<String>(retentionPolicy),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  InboxAttachment copyWith({
+    String? id,
+    String? itemId,
+    String? localPath,
+    String? mime,
+    int? sizeBytes,
+    String? sha256,
+    String? retentionPolicy,
+    DateTime? createdAt,
+  }) => InboxAttachment(
+    id: id ?? this.id,
+    itemId: itemId ?? this.itemId,
+    localPath: localPath ?? this.localPath,
+    mime: mime ?? this.mime,
+    sizeBytes: sizeBytes ?? this.sizeBytes,
+    sha256: sha256 ?? this.sha256,
+    retentionPolicy: retentionPolicy ?? this.retentionPolicy,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  InboxAttachment copyWithCompanion(InboxAttachmentsCompanion data) {
+    return InboxAttachment(
+      id: data.id.present ? data.id.value : this.id,
+      itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      localPath: data.localPath.present ? data.localPath.value : this.localPath,
+      mime: data.mime.present ? data.mime.value : this.mime,
+      sizeBytes: data.sizeBytes.present ? data.sizeBytes.value : this.sizeBytes,
+      sha256: data.sha256.present ? data.sha256.value : this.sha256,
+      retentionPolicy: data.retentionPolicy.present
+          ? data.retentionPolicy.value
+          : this.retentionPolicy,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxAttachment(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('localPath: $localPath, ')
+          ..write('mime: $mime, ')
+          ..write('sizeBytes: $sizeBytes, ')
+          ..write('sha256: $sha256, ')
+          ..write('retentionPolicy: $retentionPolicy, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    itemId,
+    localPath,
+    mime,
+    sizeBytes,
+    sha256,
+    retentionPolicy,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InboxAttachment &&
+          other.id == this.id &&
+          other.itemId == this.itemId &&
+          other.localPath == this.localPath &&
+          other.mime == this.mime &&
+          other.sizeBytes == this.sizeBytes &&
+          other.sha256 == this.sha256 &&
+          other.retentionPolicy == this.retentionPolicy &&
+          other.createdAt == this.createdAt);
+}
+
+class InboxAttachmentsCompanion extends UpdateCompanion<InboxAttachment> {
+  final Value<String> id;
+  final Value<String> itemId;
+  final Value<String> localPath;
+  final Value<String> mime;
+  final Value<int> sizeBytes;
+  final Value<String> sha256;
+  final Value<String> retentionPolicy;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const InboxAttachmentsCompanion({
+    this.id = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.localPath = const Value.absent(),
+    this.mime = const Value.absent(),
+    this.sizeBytes = const Value.absent(),
+    this.sha256 = const Value.absent(),
+    this.retentionPolicy = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InboxAttachmentsCompanion.insert({
+    required String id,
+    required String itemId,
+    required String localPath,
+    required String mime,
+    required int sizeBytes,
+    required String sha256,
+    this.retentionPolicy = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       itemId = Value(itemId),
+       localPath = Value(localPath),
+       mime = Value(mime),
+       sizeBytes = Value(sizeBytes),
+       sha256 = Value(sha256),
+       createdAt = Value(createdAt);
+  static Insertable<InboxAttachment> custom({
+    Expression<String>? id,
+    Expression<String>? itemId,
+    Expression<String>? localPath,
+    Expression<String>? mime,
+    Expression<int>? sizeBytes,
+    Expression<String>? sha256,
+    Expression<String>? retentionPolicy,
+    Expression<int>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemId != null) 'item_id': itemId,
+      if (localPath != null) 'local_path': localPath,
+      if (mime != null) 'mime': mime,
+      if (sizeBytes != null) 'size_bytes': sizeBytes,
+      if (sha256 != null) 'sha256': sha256,
+      if (retentionPolicy != null) 'retention_policy': retentionPolicy,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InboxAttachmentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? itemId,
+    Value<String>? localPath,
+    Value<String>? mime,
+    Value<int>? sizeBytes,
+    Value<String>? sha256,
+    Value<String>? retentionPolicy,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return InboxAttachmentsCompanion(
+      id: id ?? this.id,
+      itemId: itemId ?? this.itemId,
+      localPath: localPath ?? this.localPath,
+      mime: mime ?? this.mime,
+      sizeBytes: sizeBytes ?? this.sizeBytes,
+      sha256: sha256 ?? this.sha256,
+      retentionPolicy: retentionPolicy ?? this.retentionPolicy,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (localPath.present) {
+      map['local_path'] = Variable<String>(localPath.value);
+    }
+    if (mime.present) {
+      map['mime'] = Variable<String>(mime.value);
+    }
+    if (sizeBytes.present) {
+      map['size_bytes'] = Variable<int>(sizeBytes.value);
+    }
+    if (sha256.present) {
+      map['sha256'] = Variable<String>(sha256.value);
+    }
+    if (retentionPolicy.present) {
+      map['retention_policy'] = Variable<String>(retentionPolicy.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(
+        $InboxAttachmentsTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InboxAttachmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('localPath: $localPath, ')
+          ..write('mime: $mime, ')
+          ..write('sizeBytes: $sizeBytes, ')
+          ..write('sha256: $sha256, ')
+          ..write('retentionPolicy: $retentionPolicy, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ExtractedEventsTable extends ExtractedEvents
+    with TableInfo<$ExtractedEventsTable, ExtractedEvent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ExtractedEventsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
+    'item_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES inbox_items (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _entityTypeMeta = const VerificationMeta(
+    'entityType',
+  );
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+    'entity_type',
+    aliasedName,
+    false,
+    check: () => entityType.isIn(InboxEntityType.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _certaintyMeta = const VerificationMeta(
+    'certainty',
+  );
+  @override
+  late final GeneratedColumn<String> certainty = GeneratedColumn<String>(
+    'certainty',
+    aliasedName,
+    false,
+    check: () => certainty.isIn(InboxCertainty.storageValues),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _payloadJsonMeta = const VerificationMeta(
+    'payloadJson',
+  );
+  @override
+  late final GeneratedColumn<String> payloadJson = GeneratedColumn<String>(
+    'payload_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _evidenceJsonMeta = const VerificationMeta(
+    'evidenceJson',
+  );
+  @override
+  late final GeneratedColumn<String> evidenceJson = GeneratedColumn<String>(
+    'evidence_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _extractionVersionMeta = const VerificationMeta(
+    'extractionVersion',
+  );
+  @override
+  late final GeneratedColumn<String> extractionVersion =
+      GeneratedColumn<String>(
+        'extraction_version',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, int> createdAt =
+      GeneratedColumn<int>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($ExtractedEventsTable.$convertercreatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    itemId,
+    entityType,
+    certainty,
+    payloadJson,
+    evidenceJson,
+    extractionVersion,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'extracted_events';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ExtractedEvent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(
+        _itemIdMeta,
+        itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+        _entityTypeMeta,
+        entityType.isAcceptableOrUnknown(data['entity_type']!, _entityTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('certainty')) {
+      context.handle(
+        _certaintyMeta,
+        certainty.isAcceptableOrUnknown(data['certainty']!, _certaintyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_certaintyMeta);
+    }
+    if (data.containsKey('payload_json')) {
+      context.handle(
+        _payloadJsonMeta,
+        payloadJson.isAcceptableOrUnknown(
+          data['payload_json']!,
+          _payloadJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_payloadJsonMeta);
+    }
+    if (data.containsKey('evidence_json')) {
+      context.handle(
+        _evidenceJsonMeta,
+        evidenceJson.isAcceptableOrUnknown(
+          data['evidence_json']!,
+          _evidenceJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_evidenceJsonMeta);
+    }
+    if (data.containsKey('extraction_version')) {
+      context.handle(
+        _extractionVersionMeta,
+        extractionVersion.isAcceptableOrUnknown(
+          data['extraction_version']!,
+          _extractionVersionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_extractionVersionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ExtractedEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ExtractedEvent(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      )!,
+      entityType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_type'],
+      )!,
+      certainty: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}certainty'],
+      )!,
+      payloadJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload_json'],
+      )!,
+      evidenceJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}evidence_json'],
+      )!,
+      extractionVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}extraction_version'],
+      )!,
+      createdAt: $ExtractedEventsTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $ExtractedEventsTable createAlias(String alias) {
+    return $ExtractedEventsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, int> $convertercreatedAt =
+      const MicrosecondDateTimeConverter();
+}
+
+class ExtractedEvent extends DataClass implements Insertable<ExtractedEvent> {
+  final String id;
+  final String itemId;
+  final String entityType;
+  final String certainty;
+  final String payloadJson;
+  final String evidenceJson;
+  final String extractionVersion;
+  final DateTime createdAt;
+  const ExtractedEvent({
+    required this.id,
+    required this.itemId,
+    required this.entityType,
+    required this.certainty,
+    required this.payloadJson,
+    required this.evidenceJson,
+    required this.extractionVersion,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['item_id'] = Variable<String>(itemId);
+    map['entity_type'] = Variable<String>(entityType);
+    map['certainty'] = Variable<String>(certainty);
+    map['payload_json'] = Variable<String>(payloadJson);
+    map['evidence_json'] = Variable<String>(evidenceJson);
+    map['extraction_version'] = Variable<String>(extractionVersion);
+    {
+      map['created_at'] = Variable<int>(
+        $ExtractedEventsTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    return map;
+  }
+
+  ExtractedEventsCompanion toCompanion(bool nullToAbsent) {
+    return ExtractedEventsCompanion(
+      id: Value(id),
+      itemId: Value(itemId),
+      entityType: Value(entityType),
+      certainty: Value(certainty),
+      payloadJson: Value(payloadJson),
+      evidenceJson: Value(evidenceJson),
+      extractionVersion: Value(extractionVersion),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory ExtractedEvent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ExtractedEvent(
+      id: serializer.fromJson<String>(json['id']),
+      itemId: serializer.fromJson<String>(json['itemId']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      certainty: serializer.fromJson<String>(json['certainty']),
+      payloadJson: serializer.fromJson<String>(json['payloadJson']),
+      evidenceJson: serializer.fromJson<String>(json['evidenceJson']),
+      extractionVersion: serializer.fromJson<String>(json['extractionVersion']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'itemId': serializer.toJson<String>(itemId),
+      'entityType': serializer.toJson<String>(entityType),
+      'certainty': serializer.toJson<String>(certainty),
+      'payloadJson': serializer.toJson<String>(payloadJson),
+      'evidenceJson': serializer.toJson<String>(evidenceJson),
+      'extractionVersion': serializer.toJson<String>(extractionVersion),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  ExtractedEvent copyWith({
+    String? id,
+    String? itemId,
+    String? entityType,
+    String? certainty,
+    String? payloadJson,
+    String? evidenceJson,
+    String? extractionVersion,
+    DateTime? createdAt,
+  }) => ExtractedEvent(
+    id: id ?? this.id,
+    itemId: itemId ?? this.itemId,
+    entityType: entityType ?? this.entityType,
+    certainty: certainty ?? this.certainty,
+    payloadJson: payloadJson ?? this.payloadJson,
+    evidenceJson: evidenceJson ?? this.evidenceJson,
+    extractionVersion: extractionVersion ?? this.extractionVersion,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  ExtractedEvent copyWithCompanion(ExtractedEventsCompanion data) {
+    return ExtractedEvent(
+      id: data.id.present ? data.id.value : this.id,
+      itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      entityType: data.entityType.present
+          ? data.entityType.value
+          : this.entityType,
+      certainty: data.certainty.present ? data.certainty.value : this.certainty,
+      payloadJson: data.payloadJson.present
+          ? data.payloadJson.value
+          : this.payloadJson,
+      evidenceJson: data.evidenceJson.present
+          ? data.evidenceJson.value
+          : this.evidenceJson,
+      extractionVersion: data.extractionVersion.present
+          ? data.extractionVersion.value
+          : this.extractionVersion,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExtractedEvent(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('entityType: $entityType, ')
+          ..write('certainty: $certainty, ')
+          ..write('payloadJson: $payloadJson, ')
+          ..write('evidenceJson: $evidenceJson, ')
+          ..write('extractionVersion: $extractionVersion, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    itemId,
+    entityType,
+    certainty,
+    payloadJson,
+    evidenceJson,
+    extractionVersion,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ExtractedEvent &&
+          other.id == this.id &&
+          other.itemId == this.itemId &&
+          other.entityType == this.entityType &&
+          other.certainty == this.certainty &&
+          other.payloadJson == this.payloadJson &&
+          other.evidenceJson == this.evidenceJson &&
+          other.extractionVersion == this.extractionVersion &&
+          other.createdAt == this.createdAt);
+}
+
+class ExtractedEventsCompanion extends UpdateCompanion<ExtractedEvent> {
+  final Value<String> id;
+  final Value<String> itemId;
+  final Value<String> entityType;
+  final Value<String> certainty;
+  final Value<String> payloadJson;
+  final Value<String> evidenceJson;
+  final Value<String> extractionVersion;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const ExtractedEventsCompanion({
+    this.id = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.certainty = const Value.absent(),
+    this.payloadJson = const Value.absent(),
+    this.evidenceJson = const Value.absent(),
+    this.extractionVersion = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ExtractedEventsCompanion.insert({
+    required String id,
+    required String itemId,
+    required String entityType,
+    required String certainty,
+    required String payloadJson,
+    required String evidenceJson,
+    required String extractionVersion,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       itemId = Value(itemId),
+       entityType = Value(entityType),
+       certainty = Value(certainty),
+       payloadJson = Value(payloadJson),
+       evidenceJson = Value(evidenceJson),
+       extractionVersion = Value(extractionVersion),
+       createdAt = Value(createdAt);
+  static Insertable<ExtractedEvent> custom({
+    Expression<String>? id,
+    Expression<String>? itemId,
+    Expression<String>? entityType,
+    Expression<String>? certainty,
+    Expression<String>? payloadJson,
+    Expression<String>? evidenceJson,
+    Expression<String>? extractionVersion,
+    Expression<int>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemId != null) 'item_id': itemId,
+      if (entityType != null) 'entity_type': entityType,
+      if (certainty != null) 'certainty': certainty,
+      if (payloadJson != null) 'payload_json': payloadJson,
+      if (evidenceJson != null) 'evidence_json': evidenceJson,
+      if (extractionVersion != null) 'extraction_version': extractionVersion,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ExtractedEventsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? itemId,
+    Value<String>? entityType,
+    Value<String>? certainty,
+    Value<String>? payloadJson,
+    Value<String>? evidenceJson,
+    Value<String>? extractionVersion,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return ExtractedEventsCompanion(
+      id: id ?? this.id,
+      itemId: itemId ?? this.itemId,
+      entityType: entityType ?? this.entityType,
+      certainty: certainty ?? this.certainty,
+      payloadJson: payloadJson ?? this.payloadJson,
+      evidenceJson: evidenceJson ?? this.evidenceJson,
+      extractionVersion: extractionVersion ?? this.extractionVersion,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (certainty.present) {
+      map['certainty'] = Variable<String>(certainty.value);
+    }
+    if (payloadJson.present) {
+      map['payload_json'] = Variable<String>(payloadJson.value);
+    }
+    if (evidenceJson.present) {
+      map['evidence_json'] = Variable<String>(evidenceJson.value);
+    }
+    if (extractionVersion.present) {
+      map['extraction_version'] = Variable<String>(extractionVersion.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(
+        $ExtractedEventsTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExtractedEventsCompanion(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('entityType: $entityType, ')
+          ..write('certainty: $certainty, ')
+          ..write('payloadJson: $payloadJson, ')
+          ..write('evidenceJson: $evidenceJson, ')
+          ..write('extractionVersion: $extractionVersion, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -12828,6 +14449,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TombstoneRowsTable tombstoneRows = $TombstoneRowsTable(this);
   late final $ExtensionEntityRowsTable extensionEntityRows =
       $ExtensionEntityRowsTable(this);
+  late final $InboxItemsTable inboxItems = $InboxItemsTable(this);
+  late final $InboxAttachmentsTable inboxAttachments = $InboxAttachmentsTable(
+    this,
+  );
+  late final $ExtractedEventsTable extractedEvents = $ExtractedEventsTable(
+    this,
+  );
   late final Index idxConversationsUpdatedAt = Index(
     'idx_conversations_updated_at',
     'CREATE INDEX idx_conversations_updated_at ON conversation_rows (updated_at DESC, id ASC)',
@@ -12896,6 +14524,22 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_extension_entities_kind_order',
     'CREATE INDEX idx_extension_entities_kind_order ON extension_entity_rows (kind, sort_order)',
   );
+  late final Index idxInboxItemsCapturedAt = Index(
+    'idx_inbox_items_captured_at',
+    'CREATE INDEX idx_inbox_items_captured_at ON inbox_items (captured_at DESC, id ASC)',
+  );
+  late final Index idxInboxItemsContentHash = Index(
+    'idx_inbox_items_content_hash',
+    'CREATE INDEX idx_inbox_items_content_hash ON inbox_items (content_hash)',
+  );
+  late final Index idxInboxAttachmentsItem = Index(
+    'idx_inbox_attachments_item',
+    'CREATE INDEX idx_inbox_attachments_item ON inbox_attachments (item_id)',
+  );
+  late final Index idxExtractedEventsItem = Index(
+    'idx_extracted_events_item',
+    'CREATE INDEX idx_extracted_events_item ON extracted_events (item_id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -12935,6 +14579,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     messagePromptRows,
     tombstoneRows,
     extensionEntityRows,
+    inboxItems,
+    inboxAttachments,
+    extractedEvents,
     idxConversationsUpdatedAt,
     idxConversationsAssistant,
     idxMessagesConversationOrder,
@@ -12952,6 +14599,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idxMemoryEntriesDedupe,
     idxMessagePromptsConversationSnapshot,
     idxExtensionEntitiesKindOrder,
+    idxInboxItemsCapturedAt,
+    idxInboxItemsContentHash,
+    idxInboxAttachmentsItem,
+    idxExtractedEventsItem,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -13040,6 +14691,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('generation_run_rows', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'inbox_items',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('inbox_attachments', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'inbox_items',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('extracted_events', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -22028,6 +23693,1273 @@ typedef $$ExtensionEntityRowsTableProcessedTableManager =
       ExtensionEntityRow,
       PrefetchHooks Function()
     >;
+typedef $$InboxItemsTableCreateCompanionBuilder =
+    InboxItemsCompanion Function({
+      required String id,
+      required String sourceType,
+      Value<String?> rawText,
+      required String contentHash,
+      Value<String> status,
+      Value<String?> sourceApp,
+      required DateTime capturedAt,
+      required String timezone,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$InboxItemsTableUpdateCompanionBuilder =
+    InboxItemsCompanion Function({
+      Value<String> id,
+      Value<String> sourceType,
+      Value<String?> rawText,
+      Value<String> contentHash,
+      Value<String> status,
+      Value<String?> sourceApp,
+      Value<DateTime> capturedAt,
+      Value<String> timezone,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$InboxItemsTableReferences
+    extends BaseReferences<_$AppDatabase, $InboxItemsTable, InboxItem> {
+  $$InboxItemsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$InboxAttachmentsTable, List<InboxAttachment>>
+  _inboxAttachmentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.inboxAttachments,
+    aliasName: 'inbox_items__id__inbox_attachments__item_id',
+  );
+
+  $$InboxAttachmentsTableProcessedTableManager get inboxAttachmentsRefs {
+    final manager = $$InboxAttachmentsTableTableManager(
+      $_db,
+      $_db.inboxAttachments,
+    ).filter((f) => f.itemId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _inboxAttachmentsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ExtractedEventsTable, List<ExtractedEvent>>
+  _extractedEventsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.extractedEvents,
+    aliasName: 'inbox_items__id__extracted_events__item_id',
+  );
+
+  $$ExtractedEventsTableProcessedTableManager get extractedEventsRefs {
+    final manager = $$ExtractedEventsTableTableManager(
+      $_db,
+      $_db.extractedEvents,
+    ).filter((f) => f.itemId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _extractedEventsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$InboxItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $InboxItemsTable> {
+  $$InboxItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rawText => $composableBuilder(
+    column: $table.rawText,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceApp => $composableBuilder(
+    column: $table.sourceApp,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get capturedAt =>
+      $composableBuilder(
+        column: $table.capturedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get timezone => $composableBuilder(
+    column: $table.timezone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get updatedAt =>
+      $composableBuilder(
+        column: $table.updatedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  Expression<bool> inboxAttachmentsRefs(
+    Expression<bool> Function($$InboxAttachmentsTableFilterComposer f) f,
+  ) {
+    final $$InboxAttachmentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.inboxAttachments,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxAttachmentsTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxAttachments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> extractedEventsRefs(
+    Expression<bool> Function($$ExtractedEventsTableFilterComposer f) f,
+  ) {
+    final $$ExtractedEventsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.extractedEvents,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ExtractedEventsTableFilterComposer(
+            $db: $db,
+            $table: $db.extractedEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InboxItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $InboxItemsTable> {
+  $$InboxItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawText => $composableBuilder(
+    column: $table.rawText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceApp => $composableBuilder(
+    column: $table.sourceApp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get capturedAt => $composableBuilder(
+    column: $table.capturedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get timezone => $composableBuilder(
+    column: $table.timezone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$InboxItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InboxItemsTable> {
+  $$InboxItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get rawText =>
+      $composableBuilder(column: $table.rawText, builder: (column) => column);
+
+  GeneratedColumn<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceApp =>
+      $composableBuilder(column: $table.sourceApp, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get capturedAt =>
+      $composableBuilder(
+        column: $table.capturedAt,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get timezone =>
+      $composableBuilder(column: $table.timezone, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> inboxAttachmentsRefs<T extends Object>(
+    Expression<T> Function($$InboxAttachmentsTableAnnotationComposer a) f,
+  ) {
+    final $$InboxAttachmentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.inboxAttachments,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxAttachmentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxAttachments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> extractedEventsRefs<T extends Object>(
+    Expression<T> Function($$ExtractedEventsTableAnnotationComposer a) f,
+  ) {
+    final $$ExtractedEventsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.extractedEvents,
+      getReferencedColumn: (t) => t.itemId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ExtractedEventsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.extractedEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InboxItemsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $InboxItemsTable,
+          InboxItem,
+          $$InboxItemsTableFilterComposer,
+          $$InboxItemsTableOrderingComposer,
+          $$InboxItemsTableAnnotationComposer,
+          $$InboxItemsTableCreateCompanionBuilder,
+          $$InboxItemsTableUpdateCompanionBuilder,
+          (InboxItem, $$InboxItemsTableReferences),
+          InboxItem,
+          PrefetchHooks Function({
+            bool inboxAttachmentsRefs,
+            bool extractedEventsRefs,
+          })
+        > {
+  $$InboxItemsTableTableManager(_$AppDatabase db, $InboxItemsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InboxItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InboxItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InboxItemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> sourceType = const Value.absent(),
+                Value<String?> rawText = const Value.absent(),
+                Value<String> contentHash = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> sourceApp = const Value.absent(),
+                Value<DateTime> capturedAt = const Value.absent(),
+                Value<String> timezone = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InboxItemsCompanion(
+                id: id,
+                sourceType: sourceType,
+                rawText: rawText,
+                contentHash: contentHash,
+                status: status,
+                sourceApp: sourceApp,
+                capturedAt: capturedAt,
+                timezone: timezone,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String sourceType,
+                Value<String?> rawText = const Value.absent(),
+                required String contentHash,
+                Value<String> status = const Value.absent(),
+                Value<String?> sourceApp = const Value.absent(),
+                required DateTime capturedAt,
+                required String timezone,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => InboxItemsCompanion.insert(
+                id: id,
+                sourceType: sourceType,
+                rawText: rawText,
+                contentHash: contentHash,
+                status: status,
+                sourceApp: sourceApp,
+                capturedAt: capturedAt,
+                timezone: timezone,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$InboxItemsTable, InboxItem>(table),
+                  $$InboxItemsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({inboxAttachmentsRefs = false, extractedEventsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (inboxAttachmentsRefs) db.inboxAttachments,
+                    if (extractedEventsRefs) db.extractedEvents,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (inboxAttachmentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          InboxItem,
+                          $InboxItemsTable,
+                          InboxAttachment,
+                          $InboxAttachmentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$InboxItemsTableReferences
+                              ._inboxAttachmentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$InboxItemsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).inboxAttachmentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'item_id',
+                          typedResults: items,
+                        ),
+                      if (extractedEventsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          InboxItem,
+                          $InboxItemsTable,
+                          ExtractedEvent,
+                          $ExtractedEventsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$InboxItemsTableReferences
+                              ._extractedEventsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$InboxItemsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).extractedEventsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'item_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$InboxItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $InboxItemsTable,
+      InboxItem,
+      $$InboxItemsTableFilterComposer,
+      $$InboxItemsTableOrderingComposer,
+      $$InboxItemsTableAnnotationComposer,
+      $$InboxItemsTableCreateCompanionBuilder,
+      $$InboxItemsTableUpdateCompanionBuilder,
+      (InboxItem, $$InboxItemsTableReferences),
+      InboxItem,
+      PrefetchHooks Function({
+        bool inboxAttachmentsRefs,
+        bool extractedEventsRefs,
+      })
+    >;
+typedef $$InboxAttachmentsTableCreateCompanionBuilder =
+    InboxAttachmentsCompanion Function({
+      required String id,
+      required String itemId,
+      required String localPath,
+      required String mime,
+      required int sizeBytes,
+      required String sha256,
+      Value<String> retentionPolicy,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$InboxAttachmentsTableUpdateCompanionBuilder =
+    InboxAttachmentsCompanion Function({
+      Value<String> id,
+      Value<String> itemId,
+      Value<String> localPath,
+      Value<String> mime,
+      Value<int> sizeBytes,
+      Value<String> sha256,
+      Value<String> retentionPolicy,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$InboxAttachmentsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $InboxAttachmentsTable, InboxAttachment> {
+  $$InboxAttachmentsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $InboxItemsTable _itemIdTable(_$AppDatabase db) =>
+      db.inboxItems.createAlias('inbox_attachments__item_id__inbox_items__id');
+
+  $$InboxItemsTableProcessedTableManager get itemId {
+    final $_column = $_itemColumn<String>('item_id')!;
+
+    final manager = $$InboxItemsTableTableManager(
+      $_db,
+      $_db.inboxItems,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_itemIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$InboxAttachmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $InboxAttachmentsTable> {
+  $$InboxAttachmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localPath => $composableBuilder(
+    column: $table.localPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mime => $composableBuilder(
+    column: $table.mime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sha256 => $composableBuilder(
+    column: $table.sha256,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get retentionPolicy => $composableBuilder(
+    column: $table.retentionPolicy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$InboxItemsTableFilterComposer get itemId {
+    final $$InboxItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InboxAttachmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $InboxAttachmentsTable> {
+  $$InboxAttachmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localPath => $composableBuilder(
+    column: $table.localPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mime => $composableBuilder(
+    column: $table.mime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sha256 => $composableBuilder(
+    column: $table.sha256,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get retentionPolicy => $composableBuilder(
+    column: $table.retentionPolicy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$InboxItemsTableOrderingComposer get itemId {
+    final $$InboxItemsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableOrderingComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InboxAttachmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InboxAttachmentsTable> {
+  $$InboxAttachmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get localPath =>
+      $composableBuilder(column: $table.localPath, builder: (column) => column);
+
+  GeneratedColumn<String> get mime =>
+      $composableBuilder(column: $table.mime, builder: (column) => column);
+
+  GeneratedColumn<int> get sizeBytes =>
+      $composableBuilder(column: $table.sizeBytes, builder: (column) => column);
+
+  GeneratedColumn<String> get sha256 =>
+      $composableBuilder(column: $table.sha256, builder: (column) => column);
+
+  GeneratedColumn<String> get retentionPolicy => $composableBuilder(
+    column: $table.retentionPolicy,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$InboxItemsTableAnnotationComposer get itemId {
+    final $$InboxItemsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InboxAttachmentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $InboxAttachmentsTable,
+          InboxAttachment,
+          $$InboxAttachmentsTableFilterComposer,
+          $$InboxAttachmentsTableOrderingComposer,
+          $$InboxAttachmentsTableAnnotationComposer,
+          $$InboxAttachmentsTableCreateCompanionBuilder,
+          $$InboxAttachmentsTableUpdateCompanionBuilder,
+          (InboxAttachment, $$InboxAttachmentsTableReferences),
+          InboxAttachment,
+          PrefetchHooks Function({bool itemId})
+        > {
+  $$InboxAttachmentsTableTableManager(
+    _$AppDatabase db,
+    $InboxAttachmentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InboxAttachmentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InboxAttachmentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InboxAttachmentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> itemId = const Value.absent(),
+                Value<String> localPath = const Value.absent(),
+                Value<String> mime = const Value.absent(),
+                Value<int> sizeBytes = const Value.absent(),
+                Value<String> sha256 = const Value.absent(),
+                Value<String> retentionPolicy = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InboxAttachmentsCompanion(
+                id: id,
+                itemId: itemId,
+                localPath: localPath,
+                mime: mime,
+                sizeBytes: sizeBytes,
+                sha256: sha256,
+                retentionPolicy: retentionPolicy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String itemId,
+                required String localPath,
+                required String mime,
+                required int sizeBytes,
+                required String sha256,
+                Value<String> retentionPolicy = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => InboxAttachmentsCompanion.insert(
+                id: id,
+                itemId: itemId,
+                localPath: localPath,
+                mime: mime,
+                sizeBytes: sizeBytes,
+                sha256: sha256,
+                retentionPolicy: retentionPolicy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$InboxAttachmentsTable, InboxAttachment>(table),
+                  $$InboxAttachmentsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({itemId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (itemId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.itemId,
+                                referencedTable:
+                                    $$InboxAttachmentsTableReferences
+                                        ._itemIdTable(db),
+                                referencedColumn:
+                                    $$InboxAttachmentsTableReferences
+                                        ._itemIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$InboxAttachmentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $InboxAttachmentsTable,
+      InboxAttachment,
+      $$InboxAttachmentsTableFilterComposer,
+      $$InboxAttachmentsTableOrderingComposer,
+      $$InboxAttachmentsTableAnnotationComposer,
+      $$InboxAttachmentsTableCreateCompanionBuilder,
+      $$InboxAttachmentsTableUpdateCompanionBuilder,
+      (InboxAttachment, $$InboxAttachmentsTableReferences),
+      InboxAttachment,
+      PrefetchHooks Function({bool itemId})
+    >;
+typedef $$ExtractedEventsTableCreateCompanionBuilder =
+    ExtractedEventsCompanion Function({
+      required String id,
+      required String itemId,
+      required String entityType,
+      required String certainty,
+      required String payloadJson,
+      required String evidenceJson,
+      required String extractionVersion,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$ExtractedEventsTableUpdateCompanionBuilder =
+    ExtractedEventsCompanion Function({
+      Value<String> id,
+      Value<String> itemId,
+      Value<String> entityType,
+      Value<String> certainty,
+      Value<String> payloadJson,
+      Value<String> evidenceJson,
+      Value<String> extractionVersion,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$ExtractedEventsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $ExtractedEventsTable, ExtractedEvent> {
+  $$ExtractedEventsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $InboxItemsTable _itemIdTable(_$AppDatabase db) =>
+      db.inboxItems.createAlias('extracted_events__item_id__inbox_items__id');
+
+  $$InboxItemsTableProcessedTableManager get itemId {
+    final $_column = $_itemColumn<String>('item_id')!;
+
+    final manager = $$InboxItemsTableTableManager(
+      $_db,
+      $_db.inboxItems,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_itemIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ExtractedEventsTableFilterComposer
+    extends Composer<_$AppDatabase, $ExtractedEventsTable> {
+  $$ExtractedEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get certainty => $composableBuilder(
+    column: $table.certainty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get payloadJson => $composableBuilder(
+    column: $table.payloadJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get extractionVersion => $composableBuilder(
+    column: $table.extractionVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, int> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$InboxItemsTableFilterComposer get itemId {
+    final $$InboxItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExtractedEventsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ExtractedEventsTable> {
+  $$ExtractedEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get certainty => $composableBuilder(
+    column: $table.certainty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get payloadJson => $composableBuilder(
+    column: $table.payloadJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get extractionVersion => $composableBuilder(
+    column: $table.extractionVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$InboxItemsTableOrderingComposer get itemId {
+    final $$InboxItemsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableOrderingComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExtractedEventsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ExtractedEventsTable> {
+  $$ExtractedEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get certainty =>
+      $composableBuilder(column: $table.certainty, builder: (column) => column);
+
+  GeneratedColumn<String> get payloadJson => $composableBuilder(
+    column: $table.payloadJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get evidenceJson => $composableBuilder(
+    column: $table.evidenceJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get extractionVersion => $composableBuilder(
+    column: $table.extractionVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$InboxItemsTableAnnotationComposer get itemId {
+    final $$InboxItemsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemId,
+      referencedTable: $db.inboxItems,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InboxItemsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.inboxItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ExtractedEventsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ExtractedEventsTable,
+          ExtractedEvent,
+          $$ExtractedEventsTableFilterComposer,
+          $$ExtractedEventsTableOrderingComposer,
+          $$ExtractedEventsTableAnnotationComposer,
+          $$ExtractedEventsTableCreateCompanionBuilder,
+          $$ExtractedEventsTableUpdateCompanionBuilder,
+          (ExtractedEvent, $$ExtractedEventsTableReferences),
+          ExtractedEvent,
+          PrefetchHooks Function({bool itemId})
+        > {
+  $$ExtractedEventsTableTableManager(
+    _$AppDatabase db,
+    $ExtractedEventsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ExtractedEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ExtractedEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ExtractedEventsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> itemId = const Value.absent(),
+                Value<String> entityType = const Value.absent(),
+                Value<String> certainty = const Value.absent(),
+                Value<String> payloadJson = const Value.absent(),
+                Value<String> evidenceJson = const Value.absent(),
+                Value<String> extractionVersion = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ExtractedEventsCompanion(
+                id: id,
+                itemId: itemId,
+                entityType: entityType,
+                certainty: certainty,
+                payloadJson: payloadJson,
+                evidenceJson: evidenceJson,
+                extractionVersion: extractionVersion,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String itemId,
+                required String entityType,
+                required String certainty,
+                required String payloadJson,
+                required String evidenceJson,
+                required String extractionVersion,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ExtractedEventsCompanion.insert(
+                id: id,
+                itemId: itemId,
+                entityType: entityType,
+                certainty: certainty,
+                payloadJson: payloadJson,
+                evidenceJson: evidenceJson,
+                extractionVersion: extractionVersion,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ExtractedEventsTable, ExtractedEvent>(table),
+                  $$ExtractedEventsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({itemId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (itemId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.itemId,
+                                referencedTable:
+                                    $$ExtractedEventsTableReferences
+                                        ._itemIdTable(db),
+                                referencedColumn:
+                                    $$ExtractedEventsTableReferences
+                                        ._itemIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ExtractedEventsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ExtractedEventsTable,
+      ExtractedEvent,
+      $$ExtractedEventsTableFilterComposer,
+      $$ExtractedEventsTableOrderingComposer,
+      $$ExtractedEventsTableAnnotationComposer,
+      $$ExtractedEventsTableCreateCompanionBuilder,
+      $$ExtractedEventsTableUpdateCompanionBuilder,
+      (ExtractedEvent, $$ExtractedEventsTableReferences),
+      ExtractedEvent,
+      PrefetchHooks Function({bool itemId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -22103,4 +25035,10 @@ class $AppDatabaseManager {
       $$TombstoneRowsTableTableManager(_db, _db.tombstoneRows);
   $$ExtensionEntityRowsTableTableManager get extensionEntityRows =>
       $$ExtensionEntityRowsTableTableManager(_db, _db.extensionEntityRows);
+  $$InboxItemsTableTableManager get inboxItems =>
+      $$InboxItemsTableTableManager(_db, _db.inboxItems);
+  $$InboxAttachmentsTableTableManager get inboxAttachments =>
+      $$InboxAttachmentsTableTableManager(_db, _db.inboxAttachments);
+  $$ExtractedEventsTableTableManager get extractedEvents =>
+      $$ExtractedEventsTableTableManager(_db, _db.extractedEvents);
 }

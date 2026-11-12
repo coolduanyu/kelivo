@@ -938,6 +938,9 @@ class ChatDatabaseRepository {
       'extension_entity_rows',
       'gen_ui_surface_state_rows',
       'gen_ui_surface_search',
+      'inbox_items',
+      'inbox_attachments',
+      'extracted_events',
     };
     final tableRows = database.select(
       "SELECT name FROM sqlite_master WHERE type = 'table';",
@@ -1120,6 +1123,37 @@ class ChatDatabaseRepository {
       'state_json',
       'search_text',
       'updated_at',
+    ],
+    'inbox_items': [
+      'id',
+      'source_type',
+      'raw_text',
+      'content_hash',
+      'status',
+      'source_app',
+      'captured_at',
+      'timezone',
+      'updated_at',
+    ],
+    'inbox_attachments': [
+      'id',
+      'item_id',
+      'local_path',
+      'mime',
+      'size_bytes',
+      'sha256',
+      'retention_policy',
+      'created_at',
+    ],
+    'extracted_events': [
+      'id',
+      'item_id',
+      'entity_type',
+      'certainty',
+      'payload_json',
+      'evidence_json',
+      'extraction_version',
+      'created_at',
     ],
   };
 
