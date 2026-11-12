@@ -8,6 +8,7 @@ import 'package:sqlite3/common.dart' show AllowedArgumentCount, CommonDatabase;
 
 import '../../features/intelligent_ui/catalog/ui_budgets.dart';
 import '../../utils/app_directories.dart';
+import '../models/inbox_enums.dart';
 import 'schema_versions.dart';
 
 part 'app_database.g.dart';
@@ -771,6 +772,244 @@ class GenUiSurfaceStateRows extends Table {
   Set<Column<Object>> get primaryKey => {revisionId, surfaceKey};
 }
 
+/// One captured piece of unstructured input (share, paste, drop, pick).
+///
+/// [contentHash] is what makes re-importing the same screenshot or message
+/// idempotent: the capture layer skips an item whose hash already exists for the
+/// same [sourceType]. [rawText] is nullable because an image-only share has no
+/// text of its own; an attachment always carries the bytes.
+@TableIndex(
+  name: 'idx_inbox_items_captured_at',
+  columns: {
+    IndexedColumn(#capturedAt, orderBy: OrderingMode.desc),
+    IndexedColumn(#id, orderBy: OrderingMode.asc),
+  },
+)
+@TableIndex(name: 'idx_inbox_items_content_hash', columns: {#contentHash})
+class InboxItems extends Table {
+  TextColumn get id => text()();
+  TextColumn get sourceType => text().check(
+    // ignore: recursive_getters
+    sourceType.isIn(InboxSourceType.storageValues),
+  )();
+  TextColumn get rawText => text().nullable()();
+  TextColumn get contentHash => text().check(
+    // ignore: recursive_getters
+    contentHash.isNotValue(''),
+  )();
+  TextColumn get status => text()
+      .check(
+        // ignore: recursive_getters
+        status.isIn(InboxItemStatus.storageValues),
+      )
+      .withDefault(const Constant('received'))();
+  TextColumn get sourceApp => text().nullable()();
+  IntColumn get capturedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+  // IANA zone name captured at receipt, e.g. Asia/Dubai. Relative dates such as
+  // "this Friday" are resolved against it, never against the device's current
+  // zone, so a re-render cannot change what the source said.
+  TextColumn get timezone => text().check(
+    // ignore: recursive_getters
+    timezone.isNotValue(''),
+  )();
+  IntColumn get updatedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// A file or image belonging to an [InboxItems] row.
+///
+/// [localPath] points at app-controlled storage, never at the original
+/// `content://`/temp path, so closing the source app cannot invalidate it.
+@TableIndex(name: 'idx_inbox_attachments_item', columns: {#itemId})
+class InboxAttachments extends Table {
+  TextColumn get id => text()();
+  TextColumn get itemId =>
+      text().references(InboxItems, #id, onDelete: KeyAction.cascade)();
+  TextColumn get localPath => text()();
+  TextColumn get mime => text()();
+  IntColumn get sizeBytes =>
+      integer()
+      // ignore: recursive_getters
+      .check(sizeBytes.isBiggerOrEqualValue(0))();
+  TextColumn get sha256 => text()();
+  TextColumn get retentionPolicy => text()
+      .check(
+        // ignore: recursive_getters
+        retentionPolicy.isIn(InboxRetentionPolicy.storageValues),
+      )
+      .withDefault(const Constant('keep'))();
+  IntColumn get createdAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// One structured event extracted from an [InboxItems] row.
+///
+/// 0..N per item. [payloadJson] and [evidenceJson] stay opaque JSON so the
+/// extractor can evolve without a migration, but they are never executed
+/// directly: `ActionPlanner` reads them into validated operations.
+@TableIndex(name: 'idx_extracted_events_item', columns: {#itemId})
+class ExtractedEvents extends Table {
+  TextColumn get id => text()();
+  TextColumn get itemId =>
+      text().references(InboxItems, #id, onDelete: KeyAction.cascade)();
+  TextColumn get entityType => text().check(
+    // ignore: recursive_getters
+    entityType.isIn(InboxEntityType.storageValues),
+  )();
+  TextColumn get certainty => text().check(
+    // ignore: recursive_getters
+    certainty.isIn(InboxCertainty.storageValues),
+  )();
+  TextColumn get payloadJson => text()();
+  TextColumn get evidenceJson => text()();
+  TextColumn get extractionVersion => text()();
+  IntColumn get createdAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// A versioned, human-reviewable set of proposed actions for one input.
+///
+/// A plan is never executed directly: [PlannedActions] rows carry the approval
+/// state and each one is executed individually by the execution engine.
+class InboxActionPlans extends Table {
+  TextColumn get id => text()();
+  TextColumn get itemId =>
+      text().references(InboxItems, #id, onDelete: KeyAction.cascade)();
+  IntColumn get version =>
+      integer()
+      // ignore: recursive_getters
+      .check(version.isBiggerOrEqualValue(1))();
+  TextColumn get status => text().check(
+    // ignore: recursive_getters
+    status.isIn(InboxPlanStatus.storageValues),
+  )();
+  IntColumn get createdAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+  IntColumn get updatedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// One proposed operation inside a plan.
+///
+/// [idempotencyKey] is derived from the item content, the operation and the
+/// target, so re-running the same plan cannot create a second remote object.
+@TableIndex(name: 'idx_planned_actions_plan', columns: {#planId})
+@TableIndex(name: 'idx_planned_actions_idempotency', columns: {#idempotencyKey})
+class PlannedActions extends Table {
+  TextColumn get id => text()();
+  TextColumn get planId =>
+      text().references(InboxActionPlans, #id, onDelete: KeyAction.cascade)();
+  TextColumn get entityType => text().check(
+    // ignore: recursive_getters
+    entityType.isIn(InboxEntityType.storageValues),
+  )();
+  TextColumn get operation => text().check(
+    // ignore: recursive_getters
+    operation.isIn(InboxOperation.storageValues),
+  )();
+  TextColumn get connectorId => text()();
+  TextColumn get targetExternalId => text().nullable()();
+  TextColumn get fieldsJson => text()();
+  TextColumn get beforeJson => text().nullable()();
+  TextColumn get evidenceJson => text()();
+  TextColumn get certainty => text().check(
+    // ignore: recursive_getters
+    certainty.isIn(InboxCertainty.storageValues),
+  )();
+  TextColumn get risk => text().check(
+    // ignore: recursive_getters
+    risk.isIn(InboxRiskLevel.storageValues),
+  )();
+  TextColumn get approvalState => text()
+      .check(
+        // ignore: recursive_getters
+        approvalState.isIn(InboxApprovalState.storageValues),
+      )
+      .withDefault(const Constant('pending'))();
+  TextColumn get idempotencyKey => text().check(
+    // ignore: recursive_getters
+    idempotencyKey.isNotValue(''),
+  )();
+  IntColumn get createdAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+  IntColumn get updatedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// The record of one attempt to write a planned action to a connector.
+///
+/// [outcome] distinguishes a confirmed remote write from a failure; a receipt is
+/// written only after the connector reports what actually happened, so the UI can
+/// never show "executed" for something that did not happen.
+@TableIndex(name: 'idx_execution_receipts_action', columns: {#actionId})
+class ExecutionReceipts extends Table {
+  TextColumn get id => text()();
+  TextColumn get actionId =>
+      text().references(PlannedActions, #id, onDelete: KeyAction.cascade)();
+  TextColumn get connectorId => text()();
+  TextColumn get externalId => text().nullable()();
+  TextColumn get outcome => text().check(
+    // ignore: recursive_getters
+    outcome.isIn(InboxExecutionOutcome.storageValues),
+  )();
+  TextColumn get requestFingerprint => text()();
+  TextColumn get responseSummary => text()();
+  IntColumn get executedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// A configured connector destination.
+///
+/// Secrets are deliberately absent: [secretRef] names a value held outside this
+/// table, matching the design's requirement that no token lands in business data.
+class ConnectorConfigs extends Table {
+  TextColumn get id => text()();
+  TextColumn get connectorType => text()();
+  TextColumn get displayName => text()();
+  TextColumn get configJson => text()();
+  TextColumn get secretRef => text().nullable()();
+  BoolColumn get enabled => boolean().withDefault(const Constant(true))();
+  IntColumn get updatedAt =>
+      integer().map(const MicrosecondDateTimeConverter())();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Append-only audit trail for the whole inbox pipeline.
+@TableIndex(name: 'idx_audit_events_item', columns: {#itemId})
+class InboxAuditEvents extends Table {
+  TextColumn get id => text()();
+  TextColumn get itemId => text().nullable()();
+  TextColumn get actionId => text().nullable()();
+  TextColumn get eventType => text()();
+  IntColumn get timestamp =>
+      integer().map(const MicrosecondDateTimeConverter())();
+  TextColumn get detailsJson => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 @DriftDatabase(
   include: {'gen_ui_search.drift'},
   tables: [
@@ -804,6 +1043,14 @@ class GenUiSurfaceStateRows extends Table {
     TombstoneRows,
     ExtensionEntityRows,
     GenUiSurfaceStateRows,
+    InboxItems,
+    InboxAttachments,
+    ExtractedEvents,
+    InboxActionPlans,
+    PlannedActions,
+    ExecutionReceipts,
+    ConnectorConfigs,
+    InboxAuditEvents,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -816,14 +1063,16 @@ class AppDatabase extends _$AppDatabase {
   // (extras_json columns, message updated_at/sender_id, tombstone_rows,
   // extension_entity_rows) so later features can ship without further
   // migrations. Schema 5 adds isolated GenUI state and its derived search index;
-  // schema 4 was never published. Every version outside
-  // [publishedSchemaVersions] belongs to an unpublished or future format and
-  // is rejected.
-  static const currentSchemaVersion = 5;
+  // schema 4 was never published. Schema 6 adds the Universal Inbox capture and
+  // extraction tables (inbox_items, inbox_attachments, extracted_events);
+  // schema 7 adds its plan, execution, connector and audit tables.
+  // Every version outside [publishedSchemaVersions] belongs to an unpublished or
+  // future format and is rejected.
+  static const currentSchemaVersion = 7;
 
   /// Every schema that has ever shipped. A file at any of these can be
   /// upgraded by `SchemaMigrations`; anything else is rejected outright.
-  static const publishedSchemaVersions = <int>{1, 2, 3, 5};
+  static const publishedSchemaVersions = <int>{1, 2, 3, 5, 6, 7};
 
   /// Whether a live application connection may use a file as-is: either freshly
   /// created (0) or already at the current schema.
@@ -1053,6 +1302,30 @@ FROM probe;
         await m.create(schema.genUiStateSearchInsert);
         await m.create(schema.genUiStateSearchUpdate);
         await m.create(schema.genUiStateSearchDelete);
+      },
+      // Purely additive: the three Univeral Inbox tables and their indexes.
+      from5To6: (m, schema) async {
+        await m.createTable(schema.inboxItems);
+        await m.createTable(schema.inboxAttachments);
+        await m.createTable(schema.extractedEvents);
+        // stepByStep does not create new indexes automatically.
+        await m.create(schema.idxInboxItemsCapturedAt);
+        await m.create(schema.idxInboxItemsContentHash);
+        await m.create(schema.idxInboxAttachmentsItem);
+        await m.create(schema.idxExtractedEventsItem);
+      },
+      // Purely additive: the execution-loop and audit tables.
+      from6To7: (m, schema) async {
+        await m.createTable(schema.inboxActionPlans);
+        await m.createTable(schema.plannedActions);
+        await m.createTable(schema.executionReceipts);
+        await m.createTable(schema.connectorConfigs);
+        await m.createTable(schema.inboxAuditEvents);
+        // stepByStep does not create new indexes automatically.
+        await m.create(schema.idxPlannedActionsPlan);
+        await m.create(schema.idxPlannedActionsIdempotency);
+        await m.create(schema.idxExecutionReceiptsAction);
+        await m.create(schema.idxAuditEventsItem);
       },
     ),
     beforeOpen: (details) async {

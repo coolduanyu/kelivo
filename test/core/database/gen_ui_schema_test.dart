@@ -25,9 +25,10 @@ void main() {
     await directory.delete(recursive: true);
   });
 
-  Future<File> createDatabase({int version = 5}) async {
+  Future<File> createDatabase({int? version}) async {
+    version ??= AppDatabase.currentSchemaVersion;
     final file = File('${directory.path}/fixture-$version.db');
-    final GeneratedDatabase db = version == 5
+    final GeneratedDatabase db = version == AppDatabase.currentSchemaVersion
         ? AppDatabase(NativeDatabase(file))
         : GeneratedHelper().databaseForVersion(NativeDatabase(file), version);
     try {
@@ -162,7 +163,7 @@ void main() {
 
   for (final version in [1, 2, 3]) {
     test(
-      'published v$version upgrades to complete v5 with retained text',
+      'published v$version upgrades to the current schema with retained text',
       () async {
         final file = await createDatabase(version: version);
         final before = sqlite.sqlite3.open(file.path);
@@ -181,7 +182,7 @@ void main() {
           file,
         );
         expect(outcome.fromVersion, version);
-        expect(outcome.toVersion, 5);
+        expect(outcome.toVersion, AppDatabase.currentSchemaVersion);
         expect(outcome.upgraded, isTrue);
         final raw = open(file);
         GenUiDerivedSchema.validate(raw);
@@ -219,7 +220,7 @@ void main() {
         try {
           await SchemaVerifier(GeneratedHelper()).migrateAndValidate(
             db,
-            5,
+            AppDatabase.currentSchemaVersion,
             options: const ValidationOptions(validateDropped: true),
           );
         } finally {
@@ -500,12 +501,14 @@ CREATE TABLE gen_ui_surface_state_rows (
         'CREATE TRIGGER future_owned_trigger AFTER UPDATE OF future '
         'ON gen_ui_surface_state_rows BEGIN INSERT INTO future_rows VALUES (new.future); END;',
       );
-      raw.userVersion = 6;
+      // A schema one past the current one stands in for a future format.
+      final futureVersion = AppDatabase.currentSchemaVersion + 1;
+      raw.userVersion = futureVersion;
       raw.close();
       await ChatDatabaseRepository.normalizeForwardCompatibleSnapshot(file);
       final after = open(file);
       GenUiDerivedSchema.validate(after);
-      expect(after.userVersion, 5);
+      expect(after.userVersion, AppDatabase.currentSchemaVersion);
       final row = after
           .select('SELECT * FROM gen_ui_surface_state_rows;')
           .single;

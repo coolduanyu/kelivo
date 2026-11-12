@@ -125,6 +125,14 @@ void main() {
             'asset_gc_rows',
             'gc_audit_rows',
             'asset_reference_dirty_rows',
+            'inbox_items',
+            'inbox_attachments',
+            'extracted_events',
+            'inbox_action_plans',
+            'planned_actions',
+            'execution_receipts',
+            'connector_configs',
+            'inbox_audit_events',
           }),
         );
       } finally {

@@ -21893,5 +21893,131 @@
   "responseRetryWithoutImages": "Retry without images (keep originals)",
   "@responseRetryWithoutImages": {
     "description": "Action below a truncated assistant reply whose final request contained images. Regenerates once with all image inputs omitted for that generation, including tool follow-ups, without deleting attachments or changing saved settings."
+  },
+  "inboxTitle": "Inbox",
+  "@inboxTitle": {
+    "description": "Title of the Universal Inbox page and its navigation entry."
+  },
+  "inboxEmpty": "Nothing captured yet",
+  "@inboxEmpty": {
+    "description": "Empty-state text in the inbox list when no items have been captured."
+  },
+  "inboxSelectItem": "Select an item to review",
+  "@inboxSelectItem": {
+    "description": "Detail pane placeholder shown before the user picks an inbox item."
+  },
+  "inboxDropHint": "Paste a screenshot or text, or drop files here",
+  "@inboxDropHint": {
+    "description": "Hint inside the capture strip explaining that text, screenshots and files can be dropped or pasted."
+  },
+  "inboxPaste": "Paste",
+  "@inboxPaste": {
+    "description": "Button in the capture strip that pastes from the clipboard."
+  },
+  "inboxPickFile": "Choose file",
+  "@inboxPickFile": {
+    "description": "Button in the capture strip that opens the file chooser."
+  },
+  "inboxUntitled": "Untitled item",
+  "@inboxUntitled": {
+    "description": "Fallback title for a captured item that has neither text nor attachments."
+  },
+  "inboxEventCountOne": "1 event",
+  "@inboxEventCountOne": {
+    "description": "Label on an inbox item showing it produced exactly one extracted event."
+  },
+  "inboxEventCountMany": "{count} events",
+  "@inboxEventCountMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "description": "Label on an inbox item showing how many events it produced; count is an integer placeholder."
+  },
+  "inboxAttachmentOnly": "{count, plural, =1{1 attachment} other{{count} attachments}}",
+  "@inboxAttachmentOnly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "description": "Title for a captured item that has no text; count is the number of attachments."
+  },
+  "inboxSourceSection": "Captured content",
+  "@inboxSourceSection": {
+    "description": "Heading of the detail pane section showing the captured source text and its metadata."
+  },
+  "inboxProposalsSection": "Proposed changes",
+  "@inboxProposalsSection": {
+    "description": "Heading of the detail pane section listing proposed changes."
+  },
+  "inboxNoProposals": "No proposals yet",
+  "@inboxNoProposals": {
+    "description": "Shown in the proposals section before any action has been planned."
+  },
+  "inboxStatusReceived": "Received",
+  "@inboxStatusReceived": {
+    "description": "Item status: the input was captured but not analysed."
+  },
+  "inboxStatusAnalyzing": "Analyzing",
+  "@inboxStatusAnalyzing": {
+    "description": "Item status: the model is extracting or reconciling events."
+  },
+  "inboxStatusNeedsReview": "Needs review",
+  "@inboxStatusNeedsReview": {
+    "description": "Item status: proposals exist and are waiting for the user."
+  },
+  "inboxStatusExecuting": "Executing",
+  "@inboxStatusExecuting": {
+    "description": "Item status: approved actions are being written to a connector."
+  },
+  "inboxStatusExecuted": "Executed",
+  "@inboxStatusExecuted": {
+    "description": "Item status: the connector confirmed the write with a remote id."
+  },
+  "inboxStatusPartialFailure": "Partly failed",
+  "@inboxStatusPartialFailure": {
+    "description": "Item status: some actions succeeded and others failed."
+  },
+  "inboxStatusFailed": "Failed",
+  "@inboxStatusFailed": {
+    "description": "Item status: the item failed or was rejected; nothing was written."
+  },
+  "inboxApprovalPending": "Pending",
+  "@inboxApprovalPending": {
+    "description": "Per-action approval state: not yet decided by the user."
+  },
+  "inboxApprovalApproved": "Approved",
+  "@inboxApprovalApproved": {
+    "description": "Per-action approval state: the user approved this action."
+  },
+  "inboxApprovalRejected": "Rejected",
+  "@inboxApprovalRejected": {
+    "description": "Per-action approval state: the user rejected this action."
+  },
+  "inboxApprove": "Approve",
+  "@inboxApprove": {
+    "description": "Button that approves a single proposed action."
+  },
+  "inboxReject": "Reject",
+  "@inboxReject": {
+    "description": "Button that rejects a single proposed action."
+  },
+  "inboxActionExecuted": "Written to target",
+  "@inboxActionExecuted": {
+    "description": "Shown on an action that a connector actually wrote, as opposed to merely approved."
+  },
+  "inboxDiffBefore": "Before",
+  "@inboxDiffBefore": {
+    "description": "Label for the current remote value in a field-level diff."
+  },
+  "inboxDiffAfter": "After",
+  "@inboxDiffAfter": {
+    "description": "Label for the proposed new value in a field-level diff."
+  },
+  "inboxDiffEmpty": "—",
+  "@inboxDiffEmpty": {
+    "description": "Placeholder shown when one side of a diff has no value."
   }
 }

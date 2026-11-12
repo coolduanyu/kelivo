@@ -29603,6 +29603,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry without images (keep originals)'**
   String get responseRetryWithoutImages;
+
+  /// Title of the Universal Inbox page and its navigation entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get inboxTitle;
+
+  /// Empty-state text in the inbox list when no items have been captured.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing captured yet'**
+  String get inboxEmpty;
+
+  /// Detail pane placeholder shown before the user picks an inbox item.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an item to review'**
+  String get inboxSelectItem;
+
+  /// Hint inside the capture strip explaining that text, screenshots and files can be dropped or pasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a screenshot or text, or drop files here'**
+  String get inboxDropHint;
+
+  /// Button in the capture strip that pastes from the clipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get inboxPaste;
+
+  /// Button in the capture strip that opens the file chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get inboxPickFile;
+
+  /// Fallback title for a captured item that has neither text nor attachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled item'**
+  String get inboxUntitled;
+
+  /// Label on an inbox item showing it produced exactly one extracted event.
+  ///
+  /// In en, this message translates to:
+  /// **'1 event'**
+  String get inboxEventCountOne;
+
+  /// Label on an inbox item showing how many events it produced; count is an integer placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} events'**
+  String inboxEventCountMany(int count);
+
+  /// Title for a captured item that has no text; count is the number of attachments.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 attachment} other{{count} attachments}}'**
+  String inboxAttachmentOnly(int count);
+
+  /// Heading of the detail pane section showing the captured source text and its metadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured content'**
+  String get inboxSourceSection;
+
+  /// Heading of the detail pane section listing proposed changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Proposed changes'**
+  String get inboxProposalsSection;
+
+  /// Shown in the proposals section before any action has been planned.
+  ///
+  /// In en, this message translates to:
+  /// **'No proposals yet'**
+  String get inboxNoProposals;
+
+  /// Item status: the input was captured but not analysed.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get inboxStatusReceived;
+
+  /// Item status: the model is extracting or reconciling events.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing'**
+  String get inboxStatusAnalyzing;
+
+  /// Item status: proposals exist and are waiting for the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs review'**
+  String get inboxStatusNeedsReview;
+
+  /// Item status: approved actions are being written to a connector.
+  ///
+  /// In en, this message translates to:
+  /// **'Executing'**
+  String get inboxStatusExecuting;
+
+  /// Item status: the connector confirmed the write with a remote id.
+  ///
+  /// In en, this message translates to:
+  /// **'Executed'**
+  String get inboxStatusExecuted;
+
+  /// Item status: some actions succeeded and others failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Partly failed'**
+  String get inboxStatusPartialFailure;
+
+  /// Item status: the item failed or was rejected; nothing was written.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get inboxStatusFailed;
+
+  /// Per-action approval state: not yet decided by the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get inboxApprovalPending;
+
+  /// Per-action approval state: the user approved this action.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get inboxApprovalApproved;
+
+  /// Per-action approval state: the user rejected this action.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get inboxApprovalRejected;
+
+  /// Button that approves a single proposed action.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get inboxApprove;
+
+  /// Button that rejects a single proposed action.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get inboxReject;
+
+  /// Shown on an action that a connector actually wrote, as opposed to merely approved.
+  ///
+  /// In en, this message translates to:
+  /// **'Written to target'**
+  String get inboxActionExecuted;
+
+  /// Label for the current remote value in a field-level diff.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get inboxDiffBefore;
+
+  /// Label for the proposed new value in a field-level diff.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get inboxDiffAfter;
+
+  /// Placeholder shown when one side of a diff has no value.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get inboxDiffEmpty;
 }
 
 class _AppLocalizationsDelegate

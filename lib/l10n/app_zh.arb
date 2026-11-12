@@ -6150,5 +6150,48 @@
   "compressionOutputBudgetHint": "包含推理和摘要正文。留空时使用摘要目标长度；开启思考时可单独提高此上限，不会增加摘要目标长度。实际额度仍受模型输出上限限制。",
   "responseOutputLimitReached": "回复已截断：输出额度包含推理内容。请提高输出上限或降低推理强度后重试。",
   "responseContextLimitReached": "回复已截断：本次请求输入为 {inputTokens} token，接近 {contextWindow} token 的上下文上限。请缩短上下文后重试。",
-  "responseRetryWithoutImages": "不发送图片重试（保留原图）"
+  "responseRetryWithoutImages": "不发送图片重试（保留原图）",
+  "inboxTitle": "收件箱",
+  "inboxEmpty": "还没有捕获内容",
+  "inboxSelectItem": "选择一条记录查看详情",
+  "inboxDropHint": "粘贴截图或文字，也可以把文件拖到这里",
+  "inboxPaste": "粘贴",
+  "inboxPickFile": "选择文件",
+  "inboxUntitled": "无标题记录",
+  "inboxEventCountOne": "1 个事件",
+  "inboxEventCountMany": "{count} 个事件",
+  "@inboxEventCountMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inboxAttachmentOnly": "{count, plural, =1{1 个附件} other{{count} 个附件}}",
+  "@inboxAttachmentOnly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inboxSourceSection": "捕获内容",
+  "inboxProposalsSection": "变更建议",
+  "inboxNoProposals": "暂时没有建议",
+  "inboxStatusReceived": "已接收",
+  "inboxStatusAnalyzing": "分析中",
+  "inboxStatusNeedsReview": "待确认",
+  "inboxStatusExecuting": "执行中",
+  "inboxStatusExecuted": "已执行",
+  "inboxStatusPartialFailure": "部分失败",
+  "inboxStatusFailed": "失败",
+  "inboxApprovalPending": "待处理",
+  "inboxApprovalApproved": "已批准",
+  "inboxApprovalRejected": "已拒绝",
+  "inboxApprove": "批准",
+  "inboxReject": "拒绝",
+  "inboxActionExecuted": "已写入目标",
+  "inboxDiffBefore": "原值",
+  "inboxDiffAfter": "新值",
+  "inboxDiffEmpty": "—"
 }

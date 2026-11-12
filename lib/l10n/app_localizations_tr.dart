@@ -16913,4 +16913,108 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get responseRetryWithoutImages =>
       'Görseller olmadan yeniden dene (orijinalleri koru)';
+
+  @override
+  String get inboxTitle => 'Gelen Kutusu';
+
+  @override
+  String get inboxEmpty => 'Henüz bir içerik yakalanmadı';
+
+  @override
+  String get inboxSelectItem => 'İncelemek için bir öğe seçin';
+
+  @override
+  String get inboxDropHint =>
+      'Ekran görüntüsü veya metin yapıştırın, ya da dosyaları buraya bırakın';
+
+  @override
+  String get inboxPaste => 'Yapıştır';
+
+  @override
+  String get inboxPickFile => 'Dosya seç';
+
+  @override
+  String get inboxUntitled => 'Başlıksız öğe';
+
+  @override
+  String get inboxEventCountOne => '1 olay';
+
+  @override
+  String inboxEventCountMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count olay',
+      one: '1 olay',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inboxAttachmentOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ek',
+      one: '1 ek',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inboxSourceSection => 'Yakalanan içerik';
+
+  @override
+  String get inboxProposalsSection => 'Önerilen değişiklikler';
+
+  @override
+  String get inboxNoProposals => 'Henüz öneri yok';
+
+  @override
+  String get inboxStatusReceived => 'Alındı';
+
+  @override
+  String get inboxStatusAnalyzing => 'Analiz ediliyor';
+
+  @override
+  String get inboxStatusNeedsReview => 'İnceleme bekliyor';
+
+  @override
+  String get inboxStatusExecuting => 'Yürütülüyor';
+
+  @override
+  String get inboxStatusExecuted => 'Yürütüldü';
+
+  @override
+  String get inboxStatusPartialFailure => 'Kısmen başarısız';
+
+  @override
+  String get inboxStatusFailed => 'Başarısız';
+
+  @override
+  String get inboxApprovalPending => 'Beklemede';
+
+  @override
+  String get inboxApprovalApproved => 'Onaylandı';
+
+  @override
+  String get inboxApprovalRejected => 'Reddedildi';
+
+  @override
+  String get inboxApprove => 'Onayla';
+
+  @override
+  String get inboxReject => 'Reddet';
+
+  @override
+  String get inboxActionExecuted => 'Hedefe yazıldı';
+
+  @override
+  String get inboxDiffBefore => 'Önce';
+
+  @override
+  String get inboxDiffAfter => 'Sonra';
+
+  @override
+  String get inboxDiffEmpty => '—';
 }

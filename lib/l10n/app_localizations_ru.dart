@@ -17110,4 +17110,112 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get responseRetryWithoutImages =>
       'Повторить без изображений (сохранить оригиналы)';
+
+  @override
+  String get inboxTitle => 'Входящие';
+
+  @override
+  String get inboxEmpty => 'Пока ничего не добавлено';
+
+  @override
+  String get inboxSelectItem => 'Выберите запись для просмотра';
+
+  @override
+  String get inboxDropHint =>
+      'Вставьте скриншот или текст либо перетащите файлы сюда';
+
+  @override
+  String get inboxPaste => 'Вставить';
+
+  @override
+  String get inboxPickFile => 'Выбрать файл';
+
+  @override
+  String get inboxUntitled => 'Запись без названия';
+
+  @override
+  String get inboxEventCountOne => '1 событие';
+
+  @override
+  String inboxEventCountMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count события',
+      many: '$count событий',
+      few: '$count события',
+      one: '$count событие',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inboxAttachmentOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count вложения',
+      many: '$count вложений',
+      few: '$count вложения',
+      one: '$count вложение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inboxSourceSection => 'Добавленное содержимое';
+
+  @override
+  String get inboxProposalsSection => 'Предлагаемые изменения';
+
+  @override
+  String get inboxNoProposals => 'Пока нет предложений';
+
+  @override
+  String get inboxStatusReceived => 'Получено';
+
+  @override
+  String get inboxStatusAnalyzing => 'Анализ';
+
+  @override
+  String get inboxStatusNeedsReview => 'Требует проверки';
+
+  @override
+  String get inboxStatusExecuting => 'Выполняется';
+
+  @override
+  String get inboxStatusExecuted => 'Выполнено';
+
+  @override
+  String get inboxStatusPartialFailure => 'Частичный сбой';
+
+  @override
+  String get inboxStatusFailed => 'Сбой';
+
+  @override
+  String get inboxApprovalPending => 'Ожидает';
+
+  @override
+  String get inboxApprovalApproved => 'Одобрено';
+
+  @override
+  String get inboxApprovalRejected => 'Отклонено';
+
+  @override
+  String get inboxApprove => 'Одобрить';
+
+  @override
+  String get inboxReject => 'Отклонить';
+
+  @override
+  String get inboxActionExecuted => 'Записано в целевой сервис';
+
+  @override
+  String get inboxDiffBefore => 'Было';
+
+  @override
+  String get inboxDiffAfter => 'Станет';
+
+  @override
+  String get inboxDiffEmpty => '—';
 }

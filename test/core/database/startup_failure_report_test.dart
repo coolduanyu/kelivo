@@ -120,7 +120,12 @@ void main() {
         // The exact shape of the TestFlight report: an unpublished schema makes
         // the live executor's setup throw on drift's worker isolate, so the
         // caller only ever sees DriftRemoteException.
-        await createDatabaseAtVersion(directory, 7);
+        // One past the current schema stands in for a build this app does not
+        // know; a previously unpublished number would become valid on a bump.
+        await createDatabaseAtVersion(
+          directory,
+          AppDatabase.currentSchemaVersion + 1,
+        );
         final database = AppDatabase.open(file: databaseFile(directory));
         Object? caught;
         StackTrace? caughtStack;
