@@ -31985,6 +31985,103 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get responseRetryWithoutImages => '不发送图片重试（保留原图）';
+
+  @override
+  String get inboxTitle => '收件箱';
+
+  @override
+  String get inboxEmpty => '还没有捕获内容';
+
+  @override
+  String get inboxSelectItem => '选择一条记录查看详情';
+
+  @override
+  String get inboxDropHint => '粘贴截图或文字，也可以把文件拖到这里';
+
+  @override
+  String get inboxPaste => '粘贴';
+
+  @override
+  String get inboxPickFile => '选择文件';
+
+  @override
+  String get inboxUntitled => '无标题记录';
+
+  @override
+  String get inboxEventCountOne => '1 个事件';
+
+  @override
+  String inboxEventCountMany(int count) {
+    return '$count 个事件';
+  }
+
+  @override
+  String inboxAttachmentOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个附件',
+      one: '1 个附件',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inboxSourceSection => '捕获内容';
+
+  @override
+  String get inboxProposalsSection => '变更建议';
+
+  @override
+  String get inboxNoProposals => '暂时没有建议';
+
+  @override
+  String get inboxStatusReceived => '已接收';
+
+  @override
+  String get inboxStatusAnalyzing => '分析中';
+
+  @override
+  String get inboxStatusNeedsReview => '待确认';
+
+  @override
+  String get inboxStatusExecuting => '执行中';
+
+  @override
+  String get inboxStatusExecuted => '已执行';
+
+  @override
+  String get inboxStatusPartialFailure => '部分失败';
+
+  @override
+  String get inboxStatusFailed => '失败';
+
+  @override
+  String get inboxApprovalPending => '待处理';
+
+  @override
+  String get inboxApprovalApproved => '已批准';
+
+  @override
+  String get inboxApprovalRejected => '已拒绝';
+
+  @override
+  String get inboxApprove => '批准';
+
+  @override
+  String get inboxReject => '拒绝';
+
+  @override
+  String get inboxActionExecuted => '已写入目标';
+
+  @override
+  String get inboxDiffBefore => '原值';
+
+  @override
+  String get inboxDiffAfter => '新值';
+
+  @override
+  String get inboxDiffEmpty => '—';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -47936,4 +48033,101 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get responseRetryWithoutImages => '不傳送圖片重試（保留原圖）';
+
+  @override
+  String get inboxTitle => '收件匣';
+
+  @override
+  String get inboxEmpty => '尚未擷取任何內容';
+
+  @override
+  String get inboxSelectItem => '選擇一筆記錄以檢視詳情';
+
+  @override
+  String get inboxDropHint => '貼上螢幕截圖或文字，或將檔案拖曳到這裡';
+
+  @override
+  String get inboxPaste => '貼上';
+
+  @override
+  String get inboxPickFile => '選擇檔案';
+
+  @override
+  String get inboxUntitled => '無標題記錄';
+
+  @override
+  String get inboxEventCountOne => '1 個事件';
+
+  @override
+  String inboxEventCountMany(int count) {
+    return '$count 個事件';
+  }
+
+  @override
+  String inboxAttachmentOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 個附件',
+      one: '1 個附件',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inboxSourceSection => '擷取內容';
+
+  @override
+  String get inboxProposalsSection => '變更建議';
+
+  @override
+  String get inboxNoProposals => '目前沒有建議';
+
+  @override
+  String get inboxStatusReceived => '已接收';
+
+  @override
+  String get inboxStatusAnalyzing => '分析中';
+
+  @override
+  String get inboxStatusNeedsReview => '待確認';
+
+  @override
+  String get inboxStatusExecuting => '執行中';
+
+  @override
+  String get inboxStatusExecuted => '已執行';
+
+  @override
+  String get inboxStatusPartialFailure => '部分失敗';
+
+  @override
+  String get inboxStatusFailed => '失敗';
+
+  @override
+  String get inboxApprovalPending => '待處理';
+
+  @override
+  String get inboxApprovalApproved => '已核准';
+
+  @override
+  String get inboxApprovalRejected => '已拒絕';
+
+  @override
+  String get inboxApprove => '核准';
+
+  @override
+  String get inboxReject => '拒絕';
+
+  @override
+  String get inboxActionExecuted => '已寫入目標';
+
+  @override
+  String get inboxDiffBefore => '原值';
+
+  @override
+  String get inboxDiffAfter => '新值';
+
+  @override
+  String get inboxDiffEmpty => '—';
 }

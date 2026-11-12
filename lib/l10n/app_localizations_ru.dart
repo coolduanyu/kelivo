@@ -17112,32 +17112,41 @@ class AppLocalizationsRu extends AppLocalizations {
       'Повторить без изображений (сохранить оригиналы)';
 
   @override
-  String get inboxTitle => 'Inbox';
+  String get inboxTitle => 'Входящие';
 
   @override
-  String get inboxEmpty => 'Nothing captured yet';
+  String get inboxEmpty => 'Пока ничего не добавлено';
 
   @override
-  String get inboxSelectItem => 'Select an item to review';
+  String get inboxSelectItem => 'Выберите запись для просмотра';
 
   @override
-  String get inboxDropHint => 'Paste a screenshot or text, or drop files here';
+  String get inboxDropHint =>
+      'Вставьте скриншот или текст либо перетащите файлы сюда';
 
   @override
-  String get inboxPaste => 'Paste';
+  String get inboxPaste => 'Вставить';
 
   @override
-  String get inboxPickFile => 'Choose file';
+  String get inboxPickFile => 'Выбрать файл';
 
   @override
-  String get inboxUntitled => 'Untitled item';
+  String get inboxUntitled => 'Запись без названия';
 
   @override
-  String get inboxEventCountOne => '1 event';
+  String get inboxEventCountOne => '1 событие';
 
   @override
   String inboxEventCountMany(int count) {
-    return '$count events';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count события',
+      many: '$count событий',
+      few: '$count события',
+      one: '$count событие',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -17145,65 +17154,67 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count attachments',
-      one: '1 attachment',
+      other: '$count вложения',
+      many: '$count вложений',
+      few: '$count вложения',
+      one: '$count вложение',
     );
     return '$_temp0';
   }
 
   @override
-  String get inboxSourceSection => 'Captured content';
+  String get inboxSourceSection => 'Добавленное содержимое';
 
   @override
-  String get inboxProposalsSection => 'Proposed changes';
+  String get inboxProposalsSection => 'Предлагаемые изменения';
 
   @override
-  String get inboxNoProposals => 'No proposals yet';
+  String get inboxNoProposals => 'Пока нет предложений';
 
   @override
-  String get inboxStatusReceived => 'Received';
+  String get inboxStatusReceived => 'Получено';
 
   @override
-  String get inboxStatusAnalyzing => 'Analyzing';
+  String get inboxStatusAnalyzing => 'Анализ';
 
   @override
-  String get inboxStatusNeedsReview => 'Needs review';
+  String get inboxStatusNeedsReview => 'Требует проверки';
 
   @override
-  String get inboxStatusExecuting => 'Executing';
+  String get inboxStatusExecuting => 'Выполняется';
 
   @override
-  String get inboxStatusExecuted => 'Executed';
+  String get inboxStatusExecuted => 'Выполнено';
 
   @override
-  String get inboxStatusPartialFailure => 'Partly failed';
+  String get inboxStatusPartialFailure => 'Частичный сбой';
 
   @override
-  String get inboxStatusFailed => 'Failed';
+  String get inboxStatusFailed => 'Сбой';
 
   @override
-  String get inboxApprovalPending => 'Pending';
+  String get inboxApprovalPending => 'Ожидает';
 
   @override
-  String get inboxApprovalApproved => 'Approved';
+  String get inboxApprovalApproved => 'Одобрено';
 
   @override
-  String get inboxApprovalRejected => 'Rejected';
+  String get inboxApprovalRejected => 'Отклонено';
 
   @override
-  String get inboxApprove => 'Approve';
+  String get inboxApprove => 'Одобрить';
 
   @override
-  String get inboxReject => 'Reject';
+  String get inboxReject => 'Отклонить';
 
   @override
-  String get inboxActionExecuted => 'Written to target';
+  String get inboxActionExecuted => 'Записано в целевой сервис';
 
   @override
-  String get inboxDiffBefore => 'Before';
+  String get inboxDiffBefore => 'Было';
 
   @override
-  String get inboxDiffAfter => 'After';
+  String get inboxDiffAfter => 'Станет';
 
   @override
   String get inboxDiffEmpty => '—';

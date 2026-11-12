@@ -16915,32 +16915,39 @@ class AppLocalizationsTr extends AppLocalizations {
       'Görseller olmadan yeniden dene (orijinalleri koru)';
 
   @override
-  String get inboxTitle => 'Inbox';
+  String get inboxTitle => 'Gelen Kutusu';
 
   @override
-  String get inboxEmpty => 'Nothing captured yet';
+  String get inboxEmpty => 'Henüz bir içerik yakalanmadı';
 
   @override
-  String get inboxSelectItem => 'Select an item to review';
+  String get inboxSelectItem => 'İncelemek için bir öğe seçin';
 
   @override
-  String get inboxDropHint => 'Paste a screenshot or text, or drop files here';
+  String get inboxDropHint =>
+      'Ekran görüntüsü veya metin yapıştırın, ya da dosyaları buraya bırakın';
 
   @override
-  String get inboxPaste => 'Paste';
+  String get inboxPaste => 'Yapıştır';
 
   @override
-  String get inboxPickFile => 'Choose file';
+  String get inboxPickFile => 'Dosya seç';
 
   @override
-  String get inboxUntitled => 'Untitled item';
+  String get inboxUntitled => 'Başlıksız öğe';
 
   @override
-  String get inboxEventCountOne => '1 event';
+  String get inboxEventCountOne => '1 olay';
 
   @override
   String inboxEventCountMany(int count) {
-    return '$count events';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count olay',
+      one: '1 olay',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -16948,65 +16955,65 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count attachments',
-      one: '1 attachment',
+      other: '$count ek',
+      one: '1 ek',
     );
     return '$_temp0';
   }
 
   @override
-  String get inboxSourceSection => 'Captured content';
+  String get inboxSourceSection => 'Yakalanan içerik';
 
   @override
-  String get inboxProposalsSection => 'Proposed changes';
+  String get inboxProposalsSection => 'Önerilen değişiklikler';
 
   @override
-  String get inboxNoProposals => 'No proposals yet';
+  String get inboxNoProposals => 'Henüz öneri yok';
 
   @override
-  String get inboxStatusReceived => 'Received';
+  String get inboxStatusReceived => 'Alındı';
 
   @override
-  String get inboxStatusAnalyzing => 'Analyzing';
+  String get inboxStatusAnalyzing => 'Analiz ediliyor';
 
   @override
-  String get inboxStatusNeedsReview => 'Needs review';
+  String get inboxStatusNeedsReview => 'İnceleme bekliyor';
 
   @override
-  String get inboxStatusExecuting => 'Executing';
+  String get inboxStatusExecuting => 'Yürütülüyor';
 
   @override
-  String get inboxStatusExecuted => 'Executed';
+  String get inboxStatusExecuted => 'Yürütüldü';
 
   @override
-  String get inboxStatusPartialFailure => 'Partly failed';
+  String get inboxStatusPartialFailure => 'Kısmen başarısız';
 
   @override
-  String get inboxStatusFailed => 'Failed';
+  String get inboxStatusFailed => 'Başarısız';
 
   @override
-  String get inboxApprovalPending => 'Pending';
+  String get inboxApprovalPending => 'Beklemede';
 
   @override
-  String get inboxApprovalApproved => 'Approved';
+  String get inboxApprovalApproved => 'Onaylandı';
 
   @override
-  String get inboxApprovalRejected => 'Rejected';
+  String get inboxApprovalRejected => 'Reddedildi';
 
   @override
-  String get inboxApprove => 'Approve';
+  String get inboxApprove => 'Onayla';
 
   @override
-  String get inboxReject => 'Reject';
+  String get inboxReject => 'Reddet';
 
   @override
-  String get inboxActionExecuted => 'Written to target';
+  String get inboxActionExecuted => 'Hedefe yazıldı';
 
   @override
-  String get inboxDiffBefore => 'Before';
+  String get inboxDiffBefore => 'Önce';
 
   @override
-  String get inboxDiffAfter => 'After';
+  String get inboxDiffAfter => 'Sonra';
 
   @override
   String get inboxDiffEmpty => '—';

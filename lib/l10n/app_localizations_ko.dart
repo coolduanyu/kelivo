@@ -16301,32 +16301,37 @@ class AppLocalizationsKo extends AppLocalizations {
   String get responseRetryWithoutImages => '이미지 없이 재시도(원본 유지)';
 
   @override
-  String get inboxTitle => 'Inbox';
+  String get inboxTitle => '받은편지함';
 
   @override
-  String get inboxEmpty => 'Nothing captured yet';
+  String get inboxEmpty => '아직 캡처한 항목이 없습니다';
 
   @override
-  String get inboxSelectItem => 'Select an item to review';
+  String get inboxSelectItem => '검토할 항목을 선택하세요';
 
   @override
-  String get inboxDropHint => 'Paste a screenshot or text, or drop files here';
+  String get inboxDropHint => '스크린샷이나 텍스트를 붙여넣거나 파일을 여기로 끌어오세요';
 
   @override
-  String get inboxPaste => 'Paste';
+  String get inboxPaste => '붙여넣기';
 
   @override
-  String get inboxPickFile => 'Choose file';
+  String get inboxPickFile => '파일 선택';
 
   @override
-  String get inboxUntitled => 'Untitled item';
+  String get inboxUntitled => '제목 없는 항목';
 
   @override
-  String get inboxEventCountOne => '1 event';
+  String get inboxEventCountOne => '이벤트 1개';
 
   @override
   String inboxEventCountMany(int count) {
-    return '$count events';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '이벤트 $count개',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -16334,65 +16339,64 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count attachments',
-      one: '1 attachment',
+      other: '첨부 파일 $count개',
     );
     return '$_temp0';
   }
 
   @override
-  String get inboxSourceSection => 'Captured content';
+  String get inboxSourceSection => '캡처한 내용';
 
   @override
-  String get inboxProposalsSection => 'Proposed changes';
+  String get inboxProposalsSection => '변경 제안';
 
   @override
-  String get inboxNoProposals => 'No proposals yet';
+  String get inboxNoProposals => '아직 제안이 없습니다';
 
   @override
-  String get inboxStatusReceived => 'Received';
+  String get inboxStatusReceived => '접수됨';
 
   @override
-  String get inboxStatusAnalyzing => 'Analyzing';
+  String get inboxStatusAnalyzing => '분석 중';
 
   @override
-  String get inboxStatusNeedsReview => 'Needs review';
+  String get inboxStatusNeedsReview => '확인 필요';
 
   @override
-  String get inboxStatusExecuting => 'Executing';
+  String get inboxStatusExecuting => '실행 중';
 
   @override
-  String get inboxStatusExecuted => 'Executed';
+  String get inboxStatusExecuted => '실행됨';
 
   @override
-  String get inboxStatusPartialFailure => 'Partly failed';
+  String get inboxStatusPartialFailure => '일부 실패';
 
   @override
-  String get inboxStatusFailed => 'Failed';
+  String get inboxStatusFailed => '실패';
 
   @override
-  String get inboxApprovalPending => 'Pending';
+  String get inboxApprovalPending => '대기 중';
 
   @override
-  String get inboxApprovalApproved => 'Approved';
+  String get inboxApprovalApproved => '승인됨';
 
   @override
-  String get inboxApprovalRejected => 'Rejected';
+  String get inboxApprovalRejected => '거부됨';
 
   @override
-  String get inboxApprove => 'Approve';
+  String get inboxApprove => '승인';
 
   @override
-  String get inboxReject => 'Reject';
+  String get inboxReject => '거부';
 
   @override
-  String get inboxActionExecuted => 'Written to target';
+  String get inboxActionExecuted => '대상에 기록됨';
 
   @override
-  String get inboxDiffBefore => 'Before';
+  String get inboxDiffBefore => '이전';
 
   @override
-  String get inboxDiffAfter => 'After';
+  String get inboxDiffAfter => '이후';
 
   @override
   String get inboxDiffEmpty => '—';
